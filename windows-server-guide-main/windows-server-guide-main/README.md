@@ -1,93 +1,80 @@
-# windows-server-guide
+# Windows Server Easy Guide
 
+A beginner-friendly, static Windows Server field guide written in simple Hinglish. It is designed to feel like a cheat sheet: choose a task, follow short steps, validate the result, and open a detailed guide only when needed.
 
+## What is included
 
-## Getting started
+- **Easy dashboard** — choose between learning, setup, and troubleshooting.
+- **5-minute Quick Start** — the safest setup order for beginners.
+- **Printable Cheat Sheet** — daily AD, DNS, DHCP, GPO, file-share, and time commands.
+- **Click-by-click GUI guides** — lab setup, AD DS, DNS, DHCP, users, GPO, file services, backup, Hyper-V, and PKI.
+- **Troubleshooting guide** — symptoms, diagnostic commands, fixes, and escalation triggers.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Start locally
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+No build step or package installation is required.
 
-## Add your files
+### Option 1: Open directly
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+Open `public/index.html` in a modern web browser.
 
+### Option 2: Run a local static server
+
+```bash
+cd public
+python3 -m http.server 8000
 ```
-cd existing_repo
-git remote add origin https://gitlab.com/ashwanisingh2-group/windows-server-guide.git
-git branch -M main
-git push -uf origin main
+
+Then open <http://localhost:8000>.
+
+## Recommended learning order
+
+1. Build a VirtualBox lab and take a snapshot.
+2. Prepare the server name, static IP, gateway, and updates.
+3. Install AD DS and promote the first Domain Controller.
+4. Validate DNS before configuring DHCP.
+5. Create users, OUs, groups, and a pilot GPO.
+6. Configure file shares and NTFS permissions.
+7. Configure backup and perform a restore test.
+
+## Project structure
+
+```text
+public/
+├── index.html                 # Easy dashboard
+├── quickstart.html            # Beginner setup path
+├── cheatsheet.html            # Printable daily cheat sheet
+├── gui-style.css              # Shared styles and responsive layout
+├── gui-lab-setup.html         # VirtualBox practice lab
+├── gui-setup.html             # AD DS and DHCP
+├── gui-dns.html               # DNS configuration
+├── gui-users-gpo.html         # Users, OUs, groups, and GPO
+├── gui-fileserver.html        # Shares and NTFS permissions
+└── gui-troubleshooting.html   # Diagnostic and recovery guide
 ```
 
-## Integrate with your tools
+## Writing standard
 
-* [Set up project integrations](https://gitlab.com/ashwanisingh2-group/windows-server-guide/-/settings/integrations)
+When adding or updating a procedure, use this order:
 
-## Collaborate with your team
+1. **Kya** — what the task changes.
+2. **Kyu** — why it is required.
+3. **Before you start** — permissions, backup, values, and prerequisites.
+4. **Kaise** — numbered GUI steps or commands.
+5. **Validate** — command and expected successful result.
+6. **If it fails** — safe rollback or escalation trigger.
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+Use placeholders such as `<domain>`, `<server>`, `<user>`, and `<IP>` for environment-specific values. Define an abbreviation such as Domain Controller (DC) the first time it appears.
 
-## Test and Deploy
+## Safety
 
-Use the built-in continuous integration in GitLab.
-
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+This guide is educational. Test changes in a lab before production. Use an approved maintenance window, create a verified backup, document the rollback plan, and keep console/iLO access available before changing network, Active Directory, DNS, DHCP, or Group Policy settings.
 
 ## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+- Keep instructions short and outcome-focused.
+- Prefer numbered steps over long paragraphs.
+- Include an expected result for every validation command.
+- Mark read-only checks separately from configuration changes.
+- Do not publish real passwords, private IP plans, domain names, or customer information.
+- Check all relative links after changing file names or section IDs.
