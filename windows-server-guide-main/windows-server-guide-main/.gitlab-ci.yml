@@ -1,6 +1,15 @@
 pages:
   stage: deploy
   script:
+    - echo "Publishing Pages..."
+  artifacts:
+    paths:
+      - public
+  only:
+    - main
+pages:
+  stage: deploy
+  script:
     - echo "Publishing static site to GitLab Pages"
   artifacts:
     paths:

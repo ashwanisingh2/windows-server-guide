@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cheat Sheet - Bullets</title>
+  <link rel="stylesheet" href="gui-style.css">
+  <style>body{padding:24px;max-width:800px;margin:auto;font-size:15px}ul{margin:8px 0 18px 20px}h1{font-size:20px}</style>
+</head>
+<body>
+  <h1>Cheat Sheet — Quick Bullets</h1>
+
+  <h2>Essentials</h2>
+  <ul>
+    <li>DC पर static IP रखें</li>
+    <li>Client DNS = DC का IP</li>
+    <li>Production से पहले snapshot/backup लें</li>
+  </ul>
+
+  <h2>Quick Commands</h2>
+  <ul>
+    <li>DNS टेस्ट: <code>nslookup &lt;host&gt;</code></li>
+    <li>Time sync: <code>w32tm /resync</code></li>
+    <li>GPO apply: <code>gpupdate /force</code></li>
+    <li>AD repl: <code>repadmin /replsummary</code></li>
+    <li>DHCP stats: <code>Get-DhcpServerv4ScopeStatistics</code></li>
+  </ul>
+
+  <h2>Setup Order (short)</h2>
+  <ul>
+    <li>Lab → AD promote → DNS → DHCP → Users/GPO → File share → Backup</li>
+  </ul>
+
+  <h2>Troubleshoot Fast</h2>
+  <ul>
+    <li>Login fail → time, account lock, <code>klist</code></li>
+    <li>Name fail → client DNS, <code>ipconfig /flushdns</code></li>
+    <li>Replication fail → <code>dcdiag</code> + <code>repadmin /showrepl</code></li>
+  </ul>
+
+  <h2>Safety</h2>
+  <ul>
+    <li>GPO पहले pilot OU पर टेस्ट करें</li>
+    <li>DC IP बदलने से पहले console access रखें</li>
+    <li>Major change → maintenance window</li>
+  </ul>
+
+  <p style="margin-top:20px"><a href="index.html">← Back</a></p>
+</body>
+</html>

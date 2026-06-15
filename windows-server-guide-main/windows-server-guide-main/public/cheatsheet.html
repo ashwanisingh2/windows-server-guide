@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Cheat Sheet — Windows Server (सार)</title>
+  <link rel="stylesheet" href="gui-style.css">
+  <style>body{padding:28px;max-width:900px;margin:auto}</style>
+</head>
+<body>
+  <h1>Cheat Sheet — तेज़ सार</h1>
+  <p>सबसे छोटी, काम की चीज़ें — copy-paste friendly.</p>
+
+  <h2>सबसे पहले (Essentials)</h2>
+  <ul>
+    <li>Static IP on DC, client DNS = DC IP</li>
+    <li>Snapshot/backup before changes</li>
+    <li>Test commands on lab before prod</li>
+  </ul>
+
+  <h2>Quick Commands</h2>
+  <table>
+    <tr><th>Issue</th><th>Command</th></tr>
+    <tr><td>DNS test</td><td><code>nslookup host</code></td></tr>
+    <tr><td>Time sync</td><td><code>w32tm /resync</code></td></tr>
+    <tr><td>GPO apply</td><td><code>gpupdate /force</code></td></tr>
+    <tr><td>DHCP status</td><td><code>Get-DhcpServerv4ScopeStatistics</code></td></tr>
+    <tr><td>AD replication</td><td><code>repadmin /replsummary</code></td></tr>
+    <tr><td>Check services</td><td><code>Get-Service NTDS,DNS,Netlogon</code></td></tr>
+  </table>
+
+  <h2>Setup Shortcuts (order)</h2>
+  <ol>
+    <li>Lab → AD DS install → Promote DC</li>
+    <li>DNS forward/reverse → Forwarders set</li>
+    <li>DHCP scope + authorize</li>
+    <li>Users/Groups → GPO baseline</li>
+    <li>File share + NTFS perms → Shadow copies</li>
+  </ol>
+
+  <h2>Troubleshoot Fast</h2>
+  <ul>
+    <li>Login fail → check time, locked account, <code>klist</code></li>
+    <li>Name fail → client DNS, <code>ipconfig /flushdns</code>, <code>nslookup</code></li>
+    <li>Replication → <code>dcdiag</code> + <code>repadmin /showrepl</code></li>
+  </ul>
+
+  <h2>Safety Rules</h2>
+  <ul>
+    <li>Change only in maintenance window for prod</li>
+    <li>Test GPO on pilot OU first</li>
+    <li>Never change DC IP without console access</li>
+  </ul>
+
+  <p style="margin-top:30px"><a href="index.html">← Back to Main Guide</a></p>
+</body>
+</html>
