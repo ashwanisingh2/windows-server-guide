@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Infrastructure Playbook</title>
+<link rel="stylesheet" href="gui-style.css">
+<style>
+pre{background:var(--code);border:1px solid var(--border);border-radius:8px;padding:14px;overflow-x:auto;margin:12px 0;color:#7dd3fc;font-family:Consolas,monospace;font-size:13px;line-height:1.5}
+.p0{background:rgba(239,68,68,.2);color:#ef4444;padding:1px 7px;border-radius:8px;font-size:11px;font-weight:bold}
+.p1{background:rgba(245,158,11,.2);color:#f59e0b;padding:1px 7px;border-radius:8px;font-size:11px;font-weight:bold}
+.p2{background:rgba(34,197,94,.2);color:#22c55e;padding:1px 7px;border-radius:8px;font-size:11px;font-weight:bold}
+.kb{display:grid;grid-template-columns:60px 1fr;gap:4px 12px;margin:10px 0;background:#162033;border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.kb .l{color:var(--accent2);font-weight:bold;font-size:12px}.kb .t{font-size:13px}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>IT Infra Playbook</h1>
+<div class="sub">SysAdmin complete playbook</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">Phases</div>
+<a class="nav" href="#legend">Priority Legend</a>
+<a class="nav" href="#p1">1. Discovery &amp; Planning</a>
+<a class="nav" href="#p2">2. Core Infrastructure</a>
+<a class="nav" href="#p3">3. Network Services</a>
+<a class="nav" href="#p4">4. Email &amp; Collaboration</a>
+<a class="nav" href="#p5">5. Client Management</a>
+<a class="nav" href="#p6">6. Developer Network</a>
+<a class="nav" href="#p7">7. Monitoring</a>
+<a class="nav" href="#p8">8. Security &amp; Compliance</a>
+<a class="nav" href="#p9">9. Backup &amp; DR</a>
+<a class="nav" href="#p10">10. Documentation</a>
+<a class="nav" href="#p11">11. Support &amp; Training</a>
+<a class="nav" href="#p12">12. Vendor Management</a>
+<a class="nav" href="#tshoot">Troubleshooting Framework</a>
+<a class="nav" href="#deliver">Deliverables Checklist</a>
+<a class="nav" href="#tools">Tool Comparison</a>
+<div class="nav-group">Other Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP</a>
+<a class="nav" href="gui-troubleshooting.html">🔧 Troubleshooting</a>
+<a class="nav" href="gui-core-services.html">📦 Core Services</a>
+</nav>
+<main class="content">
+<div class="hero"><h1>📕 IT Infrastructure Playbook</h1><p>System Administrator ka complete playbook — naye organization mein deploy karne ke liye. 12 phases, troubleshooting framework, deliverables. Hinglish.</p></div>
+<div class="kqk"><div class="hd">📌 Is page ka context</div><div class="lbl">KYA</div><div class="txt">End-to-end IT infra deployment: network, servers, AD, email, clients, security, backup, docs, vendor.</div><div class="lbl">KYU</div><div class="txt">Bina structured plan ke deployment chaos ban jaata hai. Phase-wise approach = predictable, low-risk.</div><div class="lbl">KAISE</div><div class="txt">10-week phased rollout. Har phase: kyu zaroori, benefit, priority, real example. Neeche detail.</div></div>
+
+<h2 class="section" id="legend">Priority Legend</h2>
+<p><span class="p0">P0 Critical</span> = bina iske kuch nahi chalega &nbsp; <span class="p1">P1 Important</span> = jaldi chahiye &nbsp; <span class="p2">P2 Standard</span> = plan karke karo</p>
+<div class="box tip"><b>💡 Decision tree (on-prem vs cloud vs hybrid):</b> Data sovereignty/legacy app? → On-prem. Scalability/remote-first? → Cloud. Dono mix/migration phase? → Hybrid.</div>
+
+<h2 class="section" id="p1">Phase 1: Discovery &amp; Planning <span class="p0">P0</span> <small>(Week 1)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">Bina existing setup samjhe naya banaoge to conflict + rework. "Pehle dekho, phir decide karo."</div><div class="l">BENEFIT</div><div class="t">Accurate budget, realistic timeline, no surprises baad mein.</div></div>
+<ul>
+<li><b>Infra audit:</b> Lansweeper / Advanced IP Scanner se network discover karo — kya devices, OS, IPs hain</li>
+<li><b>Topology map:</b> switches, routers, servers, links document karo</li>
+<li><b>Stakeholder interviews:</b> HR, Finance, Dev team, Management — unki needs samjho</li>
+<li><b>Risk assessment:</b> single points of failure, EOL hardware, security gaps</li>
+</ul>
+<p><b>Real example:</b> Nayi company join ki — pehle 1 week sirf audit. Pata chala 2 servers warranty-expired the, ek switch single point of failure tha. Plan usi hisaab se bana.</p>
+
+<h2 class="section" id="p2">Phase 2: Core Infrastructure <span class="p0">P0</span> <small>(Week 2-3)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">Network + AD = foundation. Galat foundation par sab kuch unstable rahega.</div><div class="l">BENEFIT</div><div class="t">Stable, secure, scalable base — 5 saal tak problem nahi.</div></div>
+<h4>2.1 Network Architecture</h4>
+<table>
+<tr><th>VLAN</th><th>Use</th><th>Example Subnet</th></tr>
+<tr><td>10 Management</td><td>Switches, iLO, admin</td><td>10.0.10.0/24</td></tr>
+<tr><td>20 Servers</td><td>DC, file, app</td><td>10.0.20.0/24</td></tr>
+<tr><td>30 Users</td><td>Employee PCs</td><td>10.0.30.0/24</td></tr>
+<tr><td>40 Dev</td><td>Isolated dev</td><td>10.0.40.0/24</td></tr>
+<tr><td>50 Guests</td><td>Visitor Wi-Fi</td><td>10.0.50.0/24</td></tr>
+<tr><td>60 IoT/Printers</td><td>Devices</td><td>10.0.60.0/24</td></tr>
+</table>
+<ul>
+<li><b>Wi-Fi:</b> WPA2/WPA3-Enterprise + RADIUS (NPS) — AD credentials se auth</li>
+<li><b>Remote access:</b> VPN (IKEv2/SSTP enterprise; WireGuard fast/modern)</li>
+<li><b>Firewall:</b> VLAN-to-VLAN rules, least privilege segmentation</li>
+</ul>
+<h4>2.2 Windows Server Core</h4>
+<p>Roles: AD DS, DNS, DHCP, File Server, Print Server. Hardening baseline. Updates: <b>WSUS</b> (on-prem control) ya <b>WUfB</b> (cloud-managed).</p>
+<h4>2.3 Active Directory &amp; Identity</h4>
+<p>Single forest/domain (most orgs). OU = Geographic + Functional. GPO baseline (security, desktop, updates). Naming convention (first.last). Service accounts documented + least privilege.</p>
+<div class="box tip"><b>💡</b> Detailed steps: <a href="gui-setup.html">AD+DHCP</a>, <a href="gui-users-gpo.html">Users &amp; GPO</a>, <a href="gui-dns.html">DNS</a> guides.</div>
+
+<h2 class="section" id="p3">Phase 3: Network Services <span class="p0">P0</span> <small>(Week 4)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">DNS/DHCP/remote access ke bina users connect aur kaam nahi kar sakte.</div><div class="l">BENEFIT</div><div class="t">Smooth connectivity, auto IP, secure remote work.</div></div>
+<ul>
+<li><b>DNS:</b> internal zones, conditional forwarders, split-brain (internal/external), DNSSEC consider</li>
+<li><b>DHCP:</b> scope per VLAN, reservations (servers/printers), failover (hot-standby/load balance), options (DNS/domain/NTP)</li>
+<li><b>Remote access:</b> VPN gateway + NPS/RADIUS + <b>MFA</b> (Azure AD / Duo)</li>
+</ul>
+
+<h2 class="section" id="p4">Phase 4: Email &amp; Collaboration <span class="p1">P1</span> <small>(Week 5)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">Email = business communication backbone. Down = company ruk jaati hai.</div><div class="l">BENEFIT</div><div class="t">Reliable email, collaboration, mobility.</div></div>
+<table>
+<tr><th>Option</th><th>Kab choose karein</th></tr>
+<tr><td><b>Exchange On-Prem</b></td><td>Full control, data sovereignty, compliance strict. DAG for HA.</td></tr>
+<tr><td><b>Microsoft 365</b></td><td>Most orgs — no server maintenance, Teams/SharePoint included. E3/E5/F3 licenses.</td></tr>
+<tr><td><b>Hybrid</b></td><td>Migration phase ya mix — Azure AD Connect se sync.</td></tr>
+<tr><td><b>Google Workspace</b></td><td>Startups/Google-first orgs. Domain verify, dual-delivery routing.</td></tr>
+</table>
+<div class="box tip"><b>💡 Decision:</b> Naya org, &lt;500 users? → <b>M365</b> (sabse simple). Strict on-prem compliance? → Exchange. Existing on-prem + cloud move? → Hybrid.</div>
+
+<h2 class="section" id="p5">Phase 5: Client Management <span class="p1">P1</span> <small>(Week 6)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">100s of endpoints manually manage = impossible. Standardize + automate.</div><div class="l">BENEFIT</div><div class="t">Consistent, secure, fast deployment, easy support.</div></div>
+<ul>
+<li><b>Windows 10/11:</b> deploy via <b>Intune</b> (modern/cloud) ya SCCM/MDT/WDS (on-prem). BitLocker, app deploy, WUfB</li>
+<li><b>macOS:</b> Apple Business Manager + MDM (<b>Jamf</b> ya Intune). FileVault. AD join alternative: Jamf Connect / NoMAD</li>
+<li><b>macOS Server (rare):</b> Profile Manager, file sharing (SMB), caching server — mostly Jamf ne replace kar diya</li>
+</ul>
+
+<h2 class="section" id="p6">Phase 6: Developer Network <span class="p1">P1</span> <small>(Week 7)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">Dev team ko isolated, flexible environment chahiye — production ko risk nahi.</div><div class="l">BENEFIT</div><div class="t">Safe experimentation, fast CI/CD, production protected.</div></div>
+<ul>
+<li><b>Dev VLAN:</b> isolated, proxy/content filter, internal registries (NuGet/NPM/Docker)</li>
+<li><b>Code repo:</b> GitLab / Azure DevOps / GitHub Enterprise — branch policies, code review, backup</li>
+<li><b>Test env:</b> VM infra, sandbox network (prod se isolated), anonymized DB copies</li>
+</ul>
+
+<h2 class="section" id="p7">Phase 7: Monitoring &amp; Performance <span class="p1">P1</span> <small>(Week 8)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">Problem pata chalne se pehle fix = proactive. Reactive = downtime + blame.</div><div class="l">BENEFIT</div><div class="t">Early warning, trend analysis, capacity planning.</div></div>
+<ul>
+<li><b>System:</b> baselines, SIEM (Sentinel/Splunk/Elastic), SNMP (PRTG/Zabbix/Nagios), AD replication, DHCP utilization</li>
+<li><b>Network:</b> bandwidth, latency, Wireshark (packet capture), NetFlow</li>
+<li><b>Capacity:</b> disk/memory/CPU trends, growth projection, license utilization</li>
+</ul>
+
+<h2 class="section" id="p8">Phase 8: Security &amp; Compliance <span class="p0">P0</span> <small>(Ongoing)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">Security afterthought nahi hai. Ek breach = data loss + reputation + legal.</div><div class="l">BENEFIT</div><div class="t">Protected data, compliance pass, business trust.</div></div>
+<ul>
+<li><b>Identity:</b> strong password policy, <b>MFA everywhere</b>, PIM/JIT privileged access, regular access reviews</li>
+<li><b>Endpoint:</b> Defender for Endpoint, macOS baseline, EDR, vulnerability scan (Nessus/Qualys)</li>
+<li><b>Network:</b> segmentation verify, firewall audit, IDS/IPS, DLP</li>
+<li><b>Compliance:</b> audit logging, data retention, GDPR/SOC2/ISO as needed</li>
+</ul>
+
+<h2 class="section" id="p9">Phase 9: Backup &amp; Disaster Recovery <span class="p0">P0</span> <small>(Week 9)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">Ransomware/hardware fail/human error — kuch bhi ho sakta. Backup = last line of defense.</div><div class="l">BENEFIT</div><div class="t">Business continuity, data recovery, compliance.</div></div>
+<ul>
+<li><b>3-2-1 rule:</b> 3 copies, 2 media, 1 offsite</li>
+<li><b>Backup:</b> System State (AD), full server (Veeam/Azure Backup/Commvault), Exchange mailbox, file server, SQL/DB</li>
+<li><b>DR:</b> DR site (Azure Site Recovery/warm standby), RTO/RPO define, quarterly failover testing, runbooks</li>
+<li><b>Business continuity:</b> critical services priority, communication plan, alternative workspace</li>
+</ul>
+<div class="box danger"><b>⚠️</b> Untested backup = no backup. Quarterly restore drill mandatory.</div>
+
+<h2 class="section" id="p10">Phase 10: Documentation <span class="p1">P1</span> <small>(Week 10)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">"Jo document nahi hai wo exist nahi karta." Engineer chala gaya to knowledge bhi gaya.</div><div class="l">BENEFIT</div><div class="t">Knowledge transfer, faster troubleshooting, audit proof.</div></div>
+<ul>
+<li><b>Network:</b> physical + logical topology, IP schema, VLAN table, port mapping</li>
+<li><b>System:</b> server inventory (HW/OS/roles/warranty), app inventory, service accounts, password vault (KeePass/Bitwarden/Key Vault)</li>
+<li><b>Procedural:</b> runbooks, troubleshooting guides, change management, onboarding/offboarding</li>
+<li><b>Asset:</b> HW lifecycle, license compliance, procurement workflow, warranty tracking</li>
+</ul>
+<div class="box tip"><b>💡</b> Documentation kaise banayein: <a href="gui-methodology.html">Documentation Methodology</a> page dekho.</div>
+
+<h2 class="section" id="p11">Phase 11: User Support &amp; Training <span class="p2">P2</span> <small>(Ongoing)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">Trained users = kam tickets. Untrained users = phishing victims + repeated issues.</div><div class="l">BENEFIT</div><div class="t">Lower support load, fewer security incidents, happy users.</div></div>
+<ul>
+<li><b>Help desk:</b> ticketing (ServiceNow/Jira/Freshservice), SLA, self-service KB, escalation matrix</li>
+<li><b>Training:</b> security awareness (phishing/passwords), software usage, new-employee IT orientation, refreshers</li>
+<li><b>Policies:</b> Acceptable Use, clean desk, data handling, incident reporting</li>
+</ul>
+
+<h2 class="section" id="p12">Phase 12: Vendor Management <span class="p2">P2</span> <small>(Ongoing)</small></h2>
+<div class="kb"><div class="l">KYU</div><div class="t">Hardware/software/ISP vendors manage karna bhi IT ka kaam. Support contract na ho to outage lamba.</div><div class="l">BENEFIT</div><div class="t">Fast support, planned refresh, no surprise EOL.</div></div>
+<ul>
+<li><b>Coordination:</b> HW support (Dell ProSupport/HP Care Pack), SW (MS Unified Support), ISP, cloud vendors</li>
+<li><b>Lifecycle:</b> warranty tracking, refresh cycle (desktop 4yr, server 5yr, network 7yr), EOL/EOS, disposal (data destruction certificate)</li>
+</ul>
+
+<h2 class="section" id="tshoot">Troubleshooting Framework (If This, Then That)</h2>
+<table>
+<tr><th>Tier</th><th>Kya karo</th></tr>
+<tr><td>1. Information</td><td>Symptoms poochho, recent changes?, kitne affected?, error screenshots</td></tr>
+<tr><td>2. Isolation</td><td>Scope (single/dept/company), OSI layer identify, last working state</td></tr>
+<tr><td>3. Resolution</td><td>Standard fixes (restart, gpupdate, ipconfig renew), logs check, escalation criteria</td></tr>
+<tr><td>4. Documentation</td><td>Root cause + fix steps + prevention + KB update</td></tr>
+</table>
+<pre>IF single user affected      -> client-side (profile, network, app)
+IF whole department          -> switch/VLAN/GPO/share
+IF company-wide              -> core service (DNS/AD/DHCP/internet/firewall)
+IF "worked yesterday"        -> recent change/update/patch dekho</pre>
+<div class="box tip"><b>💡</b> Detailed command-level fixes: <a href="gui-troubleshooting.html">Troubleshooting Master Guide</a>.</div>
+
+<h2 class="section" id="deliver">Deliverables Checklist</h2>
+<table>
+<tr><th>Deliverable</th><th>Priority</th></tr>
+<tr><td>Network Diagram (Visio/Draw.io)</td><td><span class="p0">P0</span></td></tr>
+<tr><td>IP Addressing Scheme</td><td><span class="p0">P0</span></td></tr>
+<tr><td>Active Directory Structure</td><td><span class="p0">P0</span></td></tr>
+<tr><td>Group Policy List</td><td><span class="p1">P1</span></td></tr>
+<tr><td>Server &amp; Application Inventory</td><td><span class="p1">P1</span></td></tr>
+<tr><td>Onboarding/Offboarding SOP</td><td><span class="p1">P1</span></td></tr>
+<tr><td>Backup &amp; Recovery Runbook</td><td><span class="p0">P0</span></td></tr>
+<tr><td>Disaster Recovery Plan</td><td><span class="p0">P0</span></td></tr>
+<tr><td>Security Policy Document</td><td><span class="p1">P1</span></td></tr>
+<tr><td>Vendor Contact List + Asset Register</td><td><span class="p2">P2</span></td></tr>
+<tr><td>Change Management Process</td><td><span class="p2">P2</span></td></tr>
+<tr><td>Incident Response Plan</td><td><span class="p1">P1</span></td></tr>
+</table>
+
+<h2 class="section" id="tools">Tool Comparison (Open-source vs Commercial)</h2>
+<table>
+<tr><th>Need</th><th>Open-source / Free</th><th>Commercial</th></tr>
+<tr><td>Network discovery</td><td>Advanced IP Scanner, Nmap</td><td>Lansweeper</td></tr>
+<tr><td>Monitoring</td><td>Zabbix, Nagios</td><td>PRTG, SolarWinds</td></tr>
+<tr><td>SIEM</td><td>Elastic (ELK), Wazuh</td><td>Splunk, MS Sentinel</td></tr>
+<tr><td>Backup</td><td>Windows Server Backup, Veeam Free</td><td>Veeam, Commvault, Azure Backup</td></tr>
+<tr><td>Diagrams</td><td>Draw.io</td><td>Visio, Lucidchart</td></tr>
+<tr><td>Ticketing</td><td>osTicket, Zammad</td><td>ServiceNow, Jira, Freshservice</td></tr>
+<tr><td>Password vault</td><td>KeePass, Bitwarden</td><td>Azure Key Vault, 1Password Business</td></tr>
+<tr><td>MDM (macOS)</td><td>Munki (deploy only)</td><td>Jamf, Intune</td></tr>
+</table>
+
+<p style="margin-top:40px;color:#94a3b8;font-size:13px;border-top:1px solid #334155;padding-top:16px"><a href="index.html">← Back to Main Guide</a> · IT Infrastructure Playbook · SysAdmin Complete Toolkit</p>
+</main>
+</div>
+</body>
+</html>

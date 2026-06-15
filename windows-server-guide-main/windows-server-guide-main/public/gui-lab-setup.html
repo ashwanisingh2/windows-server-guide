@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab Setup Guide — VirtualBox</title>
+<link rel="stylesheet" href="gui-style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>Lab Setup Guide</h1>
+<div class="sub">VirtualBox · Practice Lab</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">GUI Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
+<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
+<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
+<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
+<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
+<a class="nav" href="gui-troubleshooting.html">🔧 Troubleshooting Master Guide</a>
+<a class="nav" href="gui-core-services.html">📦 Core Services Reference</a>
+<a class="nav" href="gui-methodology.html">📘 Documentation Methodology</a>
+<div class="nav-group">On This Page</div>
+<a class="nav" href="#check">Step 0: PC Check</a>
+<a class="nav" href="#vbox">Step 1: Install VirtualBox</a>
+<a class="nav" href="#iso">Step 2: Download ISO</a>
+<a class="nav" href="#vm">Step 3: Create VM</a>
+<a class="nav" href="#install">Step 4: Install Server</a>
+<a class="nav" href="#snapshot">Step 5: Snapshots</a>
+<a class="nav" href="#client">Step 6: Client VM</a>
+<a class="nav" href="#path">Learning Path</a>
+</nav>
+<main class="content">
+<div class="hero"><h1>🧪 Lab Setup Guide (VirtualBox)</h1><p>Apne PC par free practice lab banao — Windows Server VM. Beginner-friendly, step-by-step.</p></div>
+<div class="kqk"><div class="hd">📌 Is page ka context</div><div class="lbl">KYA</div><div class="txt">VirtualBox par Windows Server ka virtual lab banana, jisme website ke saare steps practice kar sako.</div><div class="lbl">KYU</div><div class="txt">Padhna ≠ karna. Real practice se hi confidence aata hai. Lab mein galti karna safe hai.</div><div class="lbl">KAISE</div><div class="txt">VirtualBox install → Server ISO → VM banao → install → snapshot → practice. Neeche steps.</div></div>
+
+<h2 class="section" id="check">Step 0: PC Ready Hai? (Check)</h2>
+<table>
+<tr><th>Requirement</th><th>Minimum</th><th>Better</th></tr>
+<tr><td>RAM</td><td>8 GB</td><td>16 GB</td></tr>
+<tr><td>Free Disk</td><td>60 GB</td><td>100 GB+</td></tr>
+<tr><td>CPU</td><td>Virtualization (VT-x/AMD-V) support</td><td>—</td></tr>
+<tr><td>OS</td><td>Windows 10/11</td><td>—</td></tr>
+</table>
+<div class="box tip"><b>💡 Virtualization check:</b> Task Manager → Performance → CPU → niche "Virtualization: <b>Enabled</b>" dikhna chahiye. Agar Disabled → BIOS mein VT-x/AMD-V enable karo.</div>
+
+<h2 class="section" id="vbox">Step 1: Install VirtualBox</h2>
+<ol>
+<li>Browser → <kbd>virtualbox.org</kbd> → Downloads → <b>Windows hosts</b></li>
+<li>Installer run karo → Next-Next-Finish (default settings theek hain)</li>
+<li>Network warning aaye to → Yes</li>
+</ol>
+
+<h2 class="section" id="iso">Step 2: Windows Server ISO Download (Free 180 days)</h2>
+<ol>
+<li>Google: <b>"Windows Server 2022 Evaluation"</b> → Microsoft Evaluation Center</li>
+<li>ISO download karo (free, 180-day full trial)</li>
+<li>(Optional) Windows 10/11 ISO bhi — client machine ke liye</li>
+</ol>
+<div class="box warn"><b>⚠️</b> Evaluation = full features, sirf 180 din. Lab ke liye perfect. Rearm karke extend bhi ho sakta hai.</div>
+
+<h2 class="section" id="vm">Step 3: VM Banao</h2>
+<ol>
+<li>VirtualBox → <span class="click">New</span></li>
+<li>Name: <kbd>DC01</kbd> · Type: Microsoft Windows · Version: Windows 2022 (64-bit)</li>
+<li>RAM: <b>4096 MB</b> (4 GB)</li>
+<li>Disk: Create virtual disk → <b>VDI</b> → Dynamically allocated → <b>60 GB</b></li>
+<li>VM select → <span class="click">Settings</span> → Storage → empty CD icon → Server ISO attach</li>
+<li>Settings → Network → Adapter 1 → <b>Internal Network</b> (client se connect ke liye) ya Bridged</li>
+</ol>
+
+<h2 class="section" id="install">Step 4: Windows Server Install</h2>
+<ol>
+<li>VM <span class="click">Start</span></li>
+<li>Language → Next → Install Now</li>
+<li>Edition: <b>Windows Server 2022 Datacenter (Desktop Experience)</b> — GUI ke liye zaroori</li>
+<li>Custom install → disk select → Next</li>
+<li>Install hone do → reboot → <b>Administrator password</b> set karo</li>
+<li>Login → Server ready! ✅</li>
+</ol>
+<div class="box tip"><b>💡</b> Install ke baad VirtualBox menu → Devices → Insert Guest Additions CD → install karo (mouse/screen smooth ho jaata hai).</div>
+
+<h2 class="section" id="snapshot">Step 5: Snapshot Lena (sabse zaroori habit)</h2>
+<ol>
+<li>Har bade step se pehle: VirtualBox → right-click VM → <span class="click">Snapshot</span> → Take</li>
+<li>Naam do: e.g. "Fresh install", "Before AD", "After AD"</li>
+<li>Kuch galat ho → us snapshot par <b>Restore</b> → wapas us point par</li>
+</ol>
+<div class="box danger"><b>⚠️</b> Snapshot = lab ka sabse bada fayda. Bindaas todo, fix karo, ya restore karo. Real server par ye luxury nahi hota.</div>
+
+<h2 class="section" id="client">Step 6 (Optional): Client VM</h2>
+<p>Ek aur VM banao Windows 10/11 ka (same <b>Internal Network</b>). Isse domain join karo — taaki GPO, login, share access real test kar sako.</p>
+
+<h2 class="section" id="path">Learning Path (is order mein practice karo)</h2>
+<table>
+<tr><th>#</th><th>Page</th><th>Kya seekhoge</th></tr>
+<tr><td>1</td><td><a href="gui-core-services.html">Core Services Reference</a></td><td>Kya-kya hai aur kyu (foundation)</td></tr>
+<tr><td>2</td><td><a href="gui-setup.html">AD + DHCP Setup</a></td><td>DC banao, DHCP setup</td></tr>
+<tr><td>3</td><td><a href="gui-dns.html">DNS Configuration</a></td><td>Zones, records, forwarders</td></tr>
+<tr><td>4</td><td><a href="gui-users-gpo.html">Users, OU &amp; GPO</a></td><td>Users banao, GPO lagao, client par test</td></tr>
+<tr><td>5</td><td><a href="gui-fileserver.html">File Server &amp; Shares</a></td><td>Share + permissions</td></tr>
+<tr><td>6</td><td><a href="gui-roles.html">Advanced Roles</a></td><td>Hyper-V, Backup, Print, PKI</td></tr>
+<tr><td>7</td><td><a href="gui-troubleshooting.html">Troubleshooting</a></td><td>Jaan-boojh ke todo, phir fix karo</td></tr>
+</table>
+<div class="box tip"><b>💡 Break &amp; Fix technique:</b> Setup karo → jaan-boojh ke todo (service band, IP galat) → Troubleshooting page se fix karo. Yahi real confidence deta hai.</div>
+
+<p style="margin-top:40px;color:#94a3b8;font-size:13px;border-top:1px solid #334155;padding-top:16px"><a href="index.html">← Back to Main Guide</a> · Lab Setup Guide · Field Engineer Toolkit</p>
+</main>
+</div>
+</body>
+</html>

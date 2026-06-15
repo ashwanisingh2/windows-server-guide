@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUI Guide — File Server &amp; Shares</title>
+<link rel="stylesheet" href="gui-style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>File Server GUI</h1>
+<div class="sub">Shares + Permissions · Click-by-click</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">GUI Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
+<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
+<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
+<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
+<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
+<div class="nav-group">On This Page</div>
+<a class="nav" href="#role">Install File Server Role</a>
+<a class="nav" href="#share">Create Share</a>
+<a class="nav" href="#ntfs">NTFS Permissions</a>
+<a class="nav" href="#abe">Access Based Enumeration</a>
+<a class="nav" href="#quota">Quota &amp; File Screening</a>
+<a class="nav" href="#shadow">Shadow Copies</a>
+<a class="nav" href="#val">Validate</a>
+</nav>
+<main class="content">
+<div class="hero"><h1>📁 File Server &amp; Shares (GUI)</h1><p>Shares, NTFS permissions, ABE, quotas, shadow copies — click-by-click.</p></div>
+<div class="kqk"><div class="hd">📌 Is page ka context</div><div class="lbl">KYA</div><div class="txt">File Server role, shares, NTFS permissions, ABE, quota aur shadow copies setup karna.</div><div class="lbl">KYU</div><div class="txt">Central storage = backup, access control aur auditing. Local PC storage = data loss risk.</div><div class="lbl">KAISE</div><div class="txt">Role install → share banao → NTFS perms (least privilege) → ABE + shadow copies. Neeche steps.</div></div>
+<div class="box danger"><b>⚠️</b> NTFS vs Share permission conflict mein <b>most restrictive</b> apply hota hai. Plan karke set karo.</div>
+
+<h2 class="section" id="role">Install File Server Role</h2>
+<ol>
+<li>Server Manager → Manage → <span class="click">Add Roles and Features</span></li>
+<li>Server Roles → expand <b>File and Storage Services</b> → <b>File and iSCSI Services</b></li>
+<li>✅ File Server, ✅ File Server Resource Manager (FSRM for quota), ✅ DFS Namespaces (optional)</li>
+<li>Next → Install</li>
+</ol>
+
+<h2 class="section" id="share">Create Share</h2>
+<ol>
+<li>File Explorer → folder banao e.g. <kbd>E:\Data\Finance</kbd></li>
+<li>Right-click folder → <span class="click">Properties</span> → <b>Sharing</b> tab → <span class="click">Advanced Sharing</span></li>
+<li>✅ Share this folder → Share name: <kbd>Finance</kbd></li>
+<li><span class="click">Permissions</span> → remove <b>Everyone</b> → Add <b>Authenticated Users</b> = <b>Change</b> → OK</li>
+</ol>
+<div class="box tip"><b>💡</b> Share level broad rakho (Change), real control NTFS level par karo.</div>
+
+<h2 class="section" id="ntfs">NTFS Permissions (real control)</h2>
+<ol>
+<li>Folder Properties → <b>Security</b> tab → <span class="click">Advanced</span></li>
+<li><span class="click">Disable inheritance</span> → "Convert inherited to explicit"</li>
+<li>Remove extra groups → Add <b>SG-Finance</b> = <b>Modify</b>, <b>Domain Admins</b> = Full</li>
+<li>OK → OK</li>
+</ol>
+<table><tr><th>Group</th><th>NTFS</th></tr><tr><td>SG-Finance</td><td>Modify</td></tr><tr><td>Domain Admins</td><td>Full Control</td></tr><tr><td>Everyone</td><td>REMOVE</td></tr></table>
+
+<h2 class="section" id="abe">Access Based Enumeration (ABE)</h2>
+<p>Users ko sirf wohi folders dikhein jinka access hai:</p>
+<ol>
+<li>Server Manager → <b>File and Storage Services</b> → <b>Shares</b></li>
+<li>Right-click share → Properties → <b>Settings</b> → ✅ Enable access-based enumeration</li>
+</ol>
+
+<h2 class="section" id="quota">Quota &amp; File Screening (FSRM)</h2>
+<ol>
+<li>Tools → <span class="click">File Server Resource Manager</span></li>
+<li><b>Quota Management</b> → right-click → Create Quota → path + limit (e.g. 5GB)</li>
+<li><b>File Screening</b> → Create File Screen → block .mp3, .exe etc.</li>
+</ol>
+
+<h2 class="section" id="shadow">Shadow Copies (Previous Versions)</h2>
+<ol>
+<li>File Explorer → right-click drive <kbd>E:</kbd> → <b>Configure Shadow Copies</b></li>
+<li>Select volume → <span class="click">Enable</span> → Settings → schedule set</li>
+</ol>
+<div class="box tip"><b>💡</b> Users khud "Previous Versions" tab se restore kar sakte → helpdesk load kam.</div>
+
+<h2 class="section" id="val">Validate</h2>
+<ul>
+<li>Client se: <kbd>\\FS01\Finance</kbd> open ho raha?</li>
+<li>Security tab → Advanced → <b>Effective Access</b> tab se user ki real permission check karo</li>
+<li>Non-member user ko access deny hona chahiye</li>
+</ul>
+<p style="margin-top:40px;color:#94a3b8;font-size:13px;border-top:1px solid #334155;padding-top:16px"><a href="index.html">← Back to Main Guide</a> · File Server GUI Guide</p>
+</main>
+</div>
+</body>
+</html>

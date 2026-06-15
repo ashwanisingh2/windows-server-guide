@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUI Guide — Users, OU &amp; Group Policy</title>
+<link rel="stylesheet" href="gui-style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>Users &amp; GPO GUI</h1>
+<div class="sub">ADUC + GPMC · Click-by-click</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">GUI Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
+<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
+<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
+<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
+<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
+<div class="nav-group">On This Page</div>
+<a class="nav" href="#aduc">Open ADUC</a>
+<a class="nav" href="#ou">Create OU</a>
+<a class="nav" href="#user">Create User</a>
+<a class="nav" href="#group">Create Group</a>
+<a class="nav" href="#deleg">Delegate Control</a>
+<a class="nav" href="#gpmc">Open GPMC</a>
+<a class="nav" href="#gpo">Create &amp; Link GPO</a>
+<a class="nav" href="#val">Validate</a>
+</nav>
+<main class="content">
+<div class="hero"><h1>👥 Users, OU &amp; Group Policy (GUI)</h1><p>ADUC se users/OU/groups, GPMC se policies — click-by-click.</p></div>
+<div class="kqk"><div class="hd">📌 Is page ka context</div><div class="lbl">KYA</div><div class="txt">OU structure, users, groups, delegation (ADUC) aur Group Policy (GPMC) banana.</div><div class="lbl">KYU</div><div class="txt">Role-based access + centralized policy. Bina iske 500 users aur 100 PCs manage impossible.</div><div class="lbl">KAISE</div><div class="txt">ADUC se OU/user/group → delegate control → GPMC se GPO create + link. Neeche steps.</div></div>
+
+<h2 class="section" id="aduc">Open ADUC</h2>
+<p>Server Manager → <span class="click">Tools</span> → <span class="click">Active Directory Users and Computers</span> &nbsp;ya&nbsp; <kbd>dsa.msc</kbd></p>
+
+<h2 class="section" id="ou">Create OU</h2>
+<ol>
+<li>Right-click domain <kbd>corp.company.local</kbd> → <span class="click">New</span> → <span class="click">Organizational Unit</span></li>
+<li>Name: <kbd>CORP-HQ</kbd> → OK (sub-OUs banao: Users, Computers, Groups)</li>
+</ol>
+<div class="box tip"><b>💡</b> Geographic + Department structure rakho. Default Users/Computers container par GPO nahi lagti.</div>
+
+<h2 class="section" id="user">Create User</h2>
+<ol>
+<li>Right-click target OU → New → <span class="click">User</span></li>
+<li>First/Last name, Logon name: <kbd>amit.sharma</kbd> → Next</li>
+<li>Password set → ✅ "User must change password at next logon" → Next → Finish</li>
+</ol>
+
+<h2 class="section" id="group">Create Group</h2>
+<ol>
+<li>Right-click OU → New → <span class="click">Group</span></li>
+<li>Name: <kbd>SG-Finance</kbd> → Scope: <b>Global</b> → Type: <b>Security</b> → OK</li>
+<li>Member add: right-click user → Add to a group → SG-Finance</li>
+</ol>
+<div class="box tip"><b>💡 AGDLP:</b> Accounts → Global group → Domain Local group → Permission.</div>
+
+<h2 class="section" id="deleg">Delegate Control (helpdesk ko rights)</h2>
+<ol>
+<li>Right-click OU → <span class="click">Delegate Control</span> → Next</li>
+<li>Add helpdesk group → Next</li>
+<li>✅ "Reset user passwords and force change at next logon" → Next → Finish</li>
+</ol>
+
+<h2 class="section" id="gpmc">Open Group Policy Management (GPMC)</h2>
+<p>Tools → <span class="click">Group Policy Management</span> &nbsp;ya&nbsp; <kbd>gpmc.msc</kbd></p>
+
+<h2 class="section" id="gpo">Create &amp; Link GPO</h2>
+<ol>
+<li>GPMC → right-click target OU → <span class="click">Create a GPO in this domain, and Link it here</span></li>
+<li>Name: <kbd>Baseline-Security</kbd> → OK</li>
+<li>Right-click GPO → <span class="click">Edit</span> (Group Policy Editor khulega)</li>
+<li>Set policies (table neeche)</li>
+</ol>
+<table>
+<tr><th>Policy</th><th>Path</th></tr>
+<tr><td>Password length 14</td><td>Computer → Windows Settings → Security → Account Policies</td></tr>
+<tr><td>Account lockout 5/15min</td><td>Same</td></tr>
+<tr><td>USB block</td><td>Computer → Admin Templates → System → Removable Storage</td></tr>
+<tr><td>Drive mapping</td><td>User → Preferences → Drive Maps</td></tr>
+</table>
+<div class="box danger"><b>⚠️</b> USB block / AppLocker domain-wide directly mat lagao. Pehle pilot OU (5-10 machines), phir rollout.</div>
+
+<h2 class="section" id="val">Validate</h2>
+<ul>
+<li>Client par CMD: <kbd>gpupdate /force</kbd></li>
+<li><kbd>gpresult /r</kbd> → applied GPOs list dekho</li>
+<li><kbd>gpresult /h report.html</kbd> → detailed report</li>
+</ul>
+<p style="margin-top:40px;color:#94a3b8;font-size:13px;border-top:1px solid #334155;padding-top:16px"><a href="index.html">← Back to Main Guide</a> · Users &amp; GPO GUI Guide</p>
+</main>
+</div>
+</body>
+</html>

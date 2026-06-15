@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Troubleshooting Master Guide</title>
+<link rel="stylesheet" href="gui-style.css">
+<style>pre{background:var(--code);border:1px solid var(--border);border-radius:8px;padding:14px;overflow-x:auto;margin:12px 0}code{font-family:Consolas,monospace;font-size:13px;color:#7dd3fc}</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>Troubleshooting Master</h1>
+<div class="sub">Symptom → Diagnose → Fix → Escalate</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">GUI Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
+<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
+<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
+<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
+<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
+<a class="nav" href="gui-troubleshooting.html">🔧 Troubleshooting Master Guide</a>
+<div class="nav-group">Issues</div>
+<a class="nav" href="#method">Troubleshooting Method</a>
+<a class="nav" href="#login">1. Login / Authentication</a>
+<a class="nav" href="#gpo">2. Group Policy</a>
+<a class="nav" href="#dhcp">3. DHCP</a>
+<a class="nav" href="#dns">4. DNS</a>
+<a class="nav" href="#share">5. File / Share Access</a>
+<a class="nav" href="#repl">6. AD Replication</a>
+<a class="nav" href="#dcrestore">7. DC Crash / Restore</a>
+<a class="nav" href="#perf">8. Performance / Slow</a>
+<a class="nav" href="#boot">9. Boot / BSOD</a>
+<a class="nav" href="#update">10. Windows Update</a>
+<a class="nav" href="#service">11. Services Crash</a>
+<a class="nav" href="#time">12. Time Sync</a>
+<a class="nav" href="#disk">13. Disk Full / Storage</a>
+<a class="nav" href="#net">14. Network / Connectivity</a>
+<a class="nav" href="#cert">15. Certificate / PKI</a>
+<a class="nav" href="#print">16. Printing</a>
+</nav>
+<main class="content">
+<div class="hero"><h1>🔧 Troubleshooting Master Guide</h1><p>Windows Server ke common production issues — har ek ka symptom, diagnostic command, step-by-step fix, aur escalation trigger. Field engineer toolkit.</p></div>
+
+<div class="box danger"><b>⚠️</b> Production par fix karne se pehle: snapshot lo, change window mein karo, console access ready rakho.</div>
+
+<h2 class="section" id="method">Troubleshooting Method (har issue par lagao)</h2>
+<p>Random commands mat chalao. Ye 5-step approach follow karo:</p>
+<table>
+<tr><th>Step</th><th>Kya karo</th></tr>
+<tr><td>1. Define</td><td>Exact symptom + error message + Event ID note karo. "Kab se?" "Kya change hua?"</td></tr>
+<tr><td>2. Scope</td><td>Ek user/server ya sab? Pattern dhoondo (ek site, ek VLAN, ek OU?)</td></tr>
+<tr><td>3. Diagnose</td><td>Logs (Event Viewer) + diagnostic commands. Layer by layer (network → DNS → service → app)</td></tr>
+<tr><td>4. Fix</td><td>Ek time par ek change. Test. Document.</td></tr>
+<tr><td>5. Verify</td><td>Issue resolved confirm karo + side-effect check</td></tr>
+</table>
+<div class="box tip"><b>💡</b> Event Viewer (<kbd>eventvwr.msc</kbd>) sabse pehla dost hai. System + Application + Security logs check karo.</div>
+
+<h2 class="section" id="login">1. Login / Authentication Issues</h2>
+<p><b>Symptom:</b> User login nahi kar pa raha, "wrong password", account locked.</p>
+<p><b>Causes:</b> Account locked/expired, password expired, time skew &gt;5 min (Kerberos fail), DC reachable nahi, group membership.</p>
+<pre><code>Get-ADUser amit.sharma -Properties LockedOut,PasswordExpired,Enabled
+Search-ADAccount -LockedOut
+w32tm /stripchart /computer:dc01 /samples:3
+klist
+nltest /dsgetdc:corp.company.local</code></pre>
+<p><b>Logs:</b> DC par Event <kbd>4625</kbd> (failed logon), <kbd>4740</kbd> (lockout). <b>Fix:</b> <kbd>Unlock-ADAccount amit.sharma</kbd>; time fix <kbd>w32tm /resync</kbd>.</p>
+<div class="box danger"><b>Escalate:</b> Multiple users ek saath locked = possible brute-force attack → senior + security.</div>
+
+<h2 class="section" id="gpo">2. Group Policy Not Applying</h2>
+<p><b>Symptom:</b> Policy setting client par reflect nahi ho rahi.</p>
+<p><b>Causes:</b> GPO not linked, security/WMI filtering, block inheritance, SYSVOL replication pending, client not domain-joined.</p>
+<pre><code>gpupdate /force
+gpresult /r
+gpresult /h C:\gpo.html
+repadmin /showrepl</code></pre>
+<p><b>Fix:</b> GPMC → Scope tab → security filtering check; inheritance check; SYSVOL replicate confirm.</p>
+<div class="box danger"><b>Escalate:</b> SYSVOL/DFSR replication broken across DCs → senior.</div>
+
+<h2 class="section" id="dhcp">3. DHCP — IP Nahi Mil Rahi</h2>
+<p><b>Causes:</b> Scope full, service stopped, server unauthorized, rogue DHCP, missing relay (ip-helper) on VLAN.</p>
+<pre><code>Get-DhcpServerInDC
+Get-DhcpServerv4ScopeStatistics
+Get-Service DHCPServer
+ipconfig /release; ipconfig /renew</code></pre>
+<p><b>Fix:</b> Authorize server, scope extend, switch par <kbd>ip helper-address</kbd> check.</p>
+<div class="box danger"><b>Escalate:</b> Rogue DHCP detected → network + security team.</div>
+
+<h2 class="section" id="dns">4. DNS — Name Resolution Fail</h2>
+<p><b>Causes:</b> Wrong DNS on client, stale records, forwarder down, zone not replicating.</p>
+<pre><code>nslookup corp.company.local
+Resolve-DnsName fs01.corp.company.local
+dcdiag /test:dns
+ipconfig /flushdns</code></pre>
+<p><b>Fix:</b> Client DNS = DC IP; stale record delete; forwarder fix; scavenging review.</p>
+<div class="box warn"><b>⚠️</b> Client ka DNS kabhi public (8.8.8.8) par mat rakho domain mein — DC ka IP hona chahiye.</div>
+
+<h2 class="section" id="share">5. File / Share Access Denied</h2>
+<p><b>Causes:</b> NTFS vs Share conflict (most restrictive wins), explicit Deny, group change (re-login needed), token bloat, ABE.</p>
+<pre><code>whoami /groups
+icacls "E:\Data\Finance"
+net use \\FS01\Finance</code></pre>
+<p><b>Fix:</b> Security → Advanced → <b>Effective Access</b> tab; re-login for fresh token; conflicting Deny remove.</p>
+<div class="box danger"><b>Escalate:</b> Token size issue (user 1000+ groups mein) → AD group cleanup project.</div>
+
+<h2 class="section" id="repl">6. AD Replication Fail</h2>
+<p><b>Causes:</b> DNS fail (most common), time skew, firewall (RPC/135), KCC issue, USN rollback, lingering objects.</p>
+<pre><code>repadmin /replsummary
+repadmin /showrepl
+dcdiag /test:replications
+portqry -n dc02 -p both -e 135</code></pre>
+<div class="box danger"><b>⚠️ USN rollback</b> (DC galat snapshot se restore) = replication permanently break → DC rebuild. Escalate immediately.</div>
+
+<h2 class="section" id="dcrestore">7. DC Crash / Restore</h2>
+<p><b>Recoverable:</b> DSRM boot → system state restore. <b>Objects deleted:</b> AD Recycle Bin restore. <b>Unrecoverable:</b> metadata cleanup + seize FSMO.</p>
+<pre><code>Get-ADObject -Filter 'isDeleted -eq $true' -IncludeDeletedObjects | Restore-ADObject
+Move-ADDirectoryServerOperationMasterRole -Identity DC02 -OperationMasterRole 0,1,2,3,4 -Force</code></pre>
+<div class="box danger"><b>Escalate:</b> FSMO seize / authoritative restore = senior approval mandatory. Seize ke baad purana DC network par mat lao.</div>
+
+<h2 class="section" id="perf">8. Performance / Server Slow</h2>
+<p><b>Symptom:</b> High CPU/RAM/disk, slow logon, app timeout.</p>
+<pre><code>Get-Process | Sort CPU -Descending | Select -First 10
+Get-Counter "\Memory\Available MBytes"
+Get-Counter "\PhysicalDisk(_Total)\% Disk Time"
+Get-Counter "\Processor(_Total)\% Processor Time"</code></pre>
+<p><b>Fix:</b> Top process identify; Task Manager / Resource Monitor (<kbd>resmon</kbd>); memory leak service restart; antivirus scan check.</p>
+<div class="box tip"><b>💡</b> Baseline pehle se rakho (normal CPU/RAM) — tabhi pata chalega "slow" kya hai.</div>
+
+<h2 class="section" id="boot">9. Boot Failure / BSOD</h2>
+<p><b>Causes:</b> Bad driver/update, disk corruption, failed AD service.</p>
+<pre><code>:: Safe Mode / DSRM boot ke baad
+sfc /scannow
+DISM /Online /Cleanup-Image /RestoreHealth
+chkdsk C: /f</code></pre>
+<p><b>Fix:</b> Last Known Good / Safe Mode; recent update uninstall; <kbd>bcdedit</kbd> se boot fix; BSOD code note karo (memory dump analyze).</p>
+<div class="box danger"><b>Escalate:</b> DC boot nahi ho raha aur recovery fail → senior (DSRM restore / rebuild).</div>
+
+<h2 class="section" id="update">10. Windows Update Fail</h2>
+<p><b>Symptom:</b> Update stuck, error code, reboot loop.</p>
+<pre><code>:: Update service reset
+net stop wuauserv
+net stop bits
+ren C:\Windows\SoftwareDistribution SoftwareDistribution.old
+net start wuauserv
+net start bits</code></pre>
+<p><b>Fix:</b> SoftwareDistribution folder reset; disk space check; specific KB manual download; WSUS sync check.</p>
+
+<h2 class="section" id="service">11. Service Crash / Won't Start</h2>
+<pre><code>Get-Service | Where Status -eq "Stopped" | Where StartType -eq "Automatic"
+Get-WinEvent -LogName System -MaxEvents 50 | Where LevelDisplayName -eq "Error"
+Start-Service -Name "ServiceName"</code></pre>
+<p><b>Fix:</b> Event Viewer mein crash reason; dependency service check (<kbd>services.msc</kbd> → Dependencies tab); recovery action set (restart on failure).</p>
+
+<h2 class="section" id="time">12. Time Sync Issue (Kerberos killer)</h2>
+<p><b>Symptom:</b> Login fail, replication fail, &gt;5 min skew.</p>
+<pre><code>w32tm /query /status
+w32tm /stripchart /computer:dc01 /samples:5
+w32tm /resync /force
+:: PDC ko external NTP point karo
+w32tm /config /manualpeerlist:"pool.ntp.org" /syncfromflags:manual /update</code></pre>
+<div class="box warn"><b>⚠️</b> PDC Emulator (FSMO) authoritative time source hai — use external NTP se sync karo, baaki sab DC/clients usse.</div>
+
+<h2 class="section" id="disk">13. Disk Full / Storage</h2>
+<pre><code>Get-Volume
+Get-ChildItem C:\ -Recurse -EA SilentlyContinue | Sort Length -Descending | Select -First 20 FullName,Length</code></pre>
+<p><b>Fix:</b> Temp/log cleanup, <kbd>cleanmgr</kbd>, old WinSxS cleanup (<kbd>DISM /Online /Cleanup-Image /StartComponentCleanup</kbd>), log rotation, disk extend.</p>
+<div class="box danger"><b>⚠️</b> DC par C: full = NTDS/SYSVOL fail = domain down. Disk space alert pehle se setup karo.</div>
+
+<h2 class="section" id="net">14. Network / Connectivity</h2>
+<pre><code>Test-NetConnection dc01 -Port 389
+Get-NetIPConfiguration
+ipconfig /all
+Tracert 8.8.8.8</code></pre>
+<p><b>Fix:</b> IP/gateway/DNS verify; NIC teaming status; firewall rule check; cable/switch port; VLAN tag.</p>
+
+<h2 class="section" id="cert">15. Certificate / PKI</h2>
+<p><b>Symptom:</b> HTTPS warning, VPN/Wi-Fi auth fail, cert expired.</p>
+<pre><code>certutil -verify -urlfetch cert.cer
+Get-ChildItem Cert:\LocalMachine\My | Select Subject,NotAfter
+certutil -crl</code></pre>
+<p><b>Fix:</b> Expired cert renew/re-enroll; CRL distribution point reachable; auto-enrollment GPO; root CA trust check.</p>
+<div class="box warn"><b>⚠️</b> CRL inaccessible = sab cert validation fail. CDP hamesha reachable rakho.</div>
+
+<h2 class="section" id="print">16. Printing Issues</h2>
+<pre><code>Get-Service Spooler
+Restart-Service Spooler
+Get-Printer
+Get-PrintJob -PrinterName "HQ-Finance-HP"</code></pre>
+<p><b>Fix:</b> Spooler restart; stuck job clear (<kbd>C:\Windows\System32\spool\PRINTERS</kbd> empty karo); driver re-install; isolation mode for bad driver.</p>
+
+<h2 class="section">Escalation Triggers (kab senior bulao)</h2>
+<table>
+<tr><th>Situation</th><th>Action</th></tr>
+<tr><td>Multiple accounts locked / attack signs</td><td>Security + senior immediately</td></tr>
+<tr><td>USN rollback / lingering objects</td><td>Senior — DC rebuild</td></tr>
+<tr><td>FSMO seize / authoritative restore</td><td>Senior approval mandatory</td></tr>
+<tr><td>DC won't boot, recovery failing</td><td>Senior + vendor support</td></tr>
+<tr><td>Data loss / ransomware</td><td>Incident response + management</td></tr>
+</table>
+<p style="margin-top:40px;color:#94a3b8;font-size:13px;border-top:1px solid #334155;padding-top:16px"><a href="index.html">← Back to Main Guide</a> · Troubleshooting Master Guide · Field Engineer Toolkit</p>
+</main>
+</div>
+</body>
+</html>

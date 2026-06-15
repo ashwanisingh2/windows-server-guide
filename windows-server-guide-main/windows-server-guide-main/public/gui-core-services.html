@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Core Services Reference</title>
+<link rel="stylesheet" href="gui-style.css">
+<style>
+pre{background:var(--code);border:1px solid var(--border);border-radius:8px;padding:14px;overflow-x:auto;margin:12px 0;color:#7dd3fc;font-family:Consolas,monospace;font-size:13px;line-height:1.5}
+.tier1{color:#22c55e;font-weight:bold}.tier2{color:#f59e0b;font-weight:bold}.tier3{color:#94a3b8;font-weight:bold}
+td:first-child{font-weight:600;color:#fff;white-space:nowrap}
+.badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:bold}
+.b1{background:rgba(34,197,94,.2);color:#22c55e}.b2{background:rgba(245,158,11,.2);color:#f59e0b}.b3{background:rgba(148,163,184,.2);color:#94a3b8}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>Core Services Reference</h1>
+<div class="sub">Must-have Windows Server roles</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">GUI Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
+<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
+<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
+<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
+<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
+<a class="nav" href="gui-troubleshooting.html">🔧 Troubleshooting Master Guide</a>
+<a class="nav" href="gui-core-services.html">📦 Core Services Reference</a>
+<div class="nav-group">On This Page</div>
+<a class="nav" href="#rank">Priority Ranking</a>
+<a class="nav" href="#tier1">Tier 1: Must Have</a>
+<a class="nav" href="#tier2">Tier 2: Important</a>
+<a class="nav" href="#tier3">Tier 3: Nice to Have</a>
+<a class="nav" href="#dep">Dependency Chain</a>
+</nav>
+<main class="content">
+<div class="hero"><h1>📦 Core Services Reference</h1><p>Windows Server ke must-have roles — har ek ka purpose, bina iske kya hoga, real use case, aur priority tier.</p></div>
+
+<div class="box tip"><b>💡 Note:</b> "Alternative koi nahi" technically galat hai — har cheez ka koi alternative hota hai. Yahan likha hai <b>Windows ecosystem mein iski jagah lena kyu mushkil hai</b>.</div>
+
+<h2 class="section" id="rank">Priority Ranking (ek nazar mein)</h2>
+<table>
+<tr><th>Tier</th><th>Matlab</th><th>Services</th></tr>
+<tr><td><span class="badge b1">Tier 1</span></td><td>Must-have, bina iske company chal hi nahi sakti</td><td>AD DS, DNS, DHCP, File Server/SMB, Group Policy, Defender, Firewall, Backup, VSS</td></tr>
+<tr><td><span class="badge b2">Tier 2</span></td><td>Important, zyaadatar orgs mein</td><td>AD CS, NPS, RRAS/VPN, DFS, IIS, Hyper-V, Task Scheduler, PowerShell/DSC, Event Viewer/PerfMon, RDS, WinRM, BitLocker, AppLocker</td></tr>
+<tr><td><span class="badge b3">Tier 3</span></td><td>Nice-to-have / specific need</td><td>DirectAccess, Storage Spaces/Replica, iSCSI Target, Containers, Admin Center, Application Server</td></tr>
+</table>
+
+<h2 class="section" id="tier1"><span class="tier1">Tier 1</span> — Must Have (bina iske company down)</h2>
+<table>
+<tr><th>Service</th><th>Kya hai / Purpose</th><th>Bina iske kya hoga</th><th>Real use case</th></tr>
+<tr><td>AD DS</td><td>Central identity directory — users, computers, auth, SSO</td><td>Har PC alag login, no SSO/policy, 500 users manage impossible</td><td>Employee join → ek account, sab apps/shares/PCs login</td></tr>
+<tr><td>DNS</td><td>Naam → IP resolution; AD ki backbone</td><td>AD hi nahi chalega, internet/email/apps fail</td><td>fileserver type karo → IP resolve → share khule</td></tr>
+<tr><td>DHCP</td><td>Auto IP/gateway/DNS assignment</td><td>500 devices manual IP = conflicts, nightmare</td><td>Naya laptop laga → turant IP + settings auto</td></tr>
+<tr><td>File Server / SMB</td><td>Central file storage + sharing</td><td>Data PCs par bikhra, no backup/access control</td><td>\\FS01\Finance → team shared docs, permission-controlled</td></tr>
+<tr><td>Group Policy</td><td>Centralized config/security enforcement</td><td>100 PCs manually = impossible, inconsistent</td><td>Ek policy → sab PCs par password rule + USB block</td></tr>
+<tr><td>Windows Defender</td><td>Built-in antivirus / EDR</td><td>Malware/ransomware open door</td><td>Real-time scan, ransomware se files protect</td></tr>
+<tr><td>Windows Firewall</td><td>Host-based traffic control</td><td>Server har port par exposed, lateral attack easy</td><td>Sirf zaroori ports allow (RDP, SMB), baaki block</td></tr>
+<tr><td>Server Backup / WBAdmin</td><td>System state + full server backup</td><td>Crash/ransomware = permanent data loss</td><td>DC crash → system state restore → AD wapas</td></tr>
+<tr><td>VSS (Shadow Copy)</td><td>Point-in-time snapshots, open-file backup</td><td>Open files backup nahi, no "previous versions"</td><td>File delete → "Previous Versions" se restore</td></tr>
+</table>
+<div class="box danger"><b>⚠️ Kyu foundation:</b> AD ke bina GPO, file perms (Kerberos), AD CS, NPS chal hi nahi sakte. DNS na ho to AD locate hi nahi hoga.</div>
+
+<h2 class="section" id="tier2"><span class="tier2">Tier 2</span> — Important (zyaadatar orgs)</h2>
+<table>
+<tr><th>Service</th><th>Kya hai / Purpose</th><th>Bina iske kya hoga</th><th>Real use case</th></tr>
+<tr><td>AD CS (PKI)</td><td>Internal Certificate Authority</td><td>HTTPS/VPN/Wi-Fi/email encryption paid ya insecure</td><td>Internal apps ko free SSL, Wi-Fi 802.1x auth</td></tr>
+<tr><td>NPS (RADIUS)</td><td>Central network auth (Wi-Fi, VPN, switch)</td><td>Har device local auth, no central control</td><td>Wi-Fi par AD credentials se login (802.1x)</td></tr>
+<tr><td>RRAS / VPN</td><td>Remote access into network</td><td>WFH employees internal resources access nahi kar sakte</td><td>Ghar se VPN → internal file server access</td></tr>
+<tr><td>DFS (Namespace+Repl)</td><td>Unified path + multi-site sync</td><td>Alag paths yaad rakhne, no redundancy</td><td>\\company\data ek path, backend multiple + branch sync</td></tr>
+<tr><td>IIS</td><td>Web server (sites, apps, APIs)</td><td>Intranet, internal apps/APIs host nahi honge</td><td>HR portal, intranet, internal REST APIs</td></tr>
+<tr><td>Hyper-V</td><td>Virtualization platform</td><td>Har service ke liye alag physical server = cost</td><td>Ek host par 10 VMs (DC, file, app) consolidate</td></tr>
+<tr><td>Task Scheduler</td><td>Automated scheduled jobs</td><td>Backups/scripts manually run karne padte</td><td>Roz 2 AM auto backup + log cleanup</td></tr>
+<tr><td>PowerShell + DSC</td><td>Automation + config-as-code</td><td>Sab manual, slow, error-prone</td><td>50 users CSV se script mein create; DSC config drift prevent</td></tr>
+<tr><td>Event Viewer + PerfMon</td><td>Logging + performance monitoring</td><td>Root cause pata nahi, no early warning</td><td>Crash cause Event ID se; CPU baseline se capacity plan</td></tr>
+<tr><td>RDS</td><td>Remote desktop / session host</td><td>Remote admin + published apps nahi</td><td>Admin server manage; thin client par published app</td></tr>
+<tr><td>WinRM / WS-Man</td><td>Remote management protocol</td><td>Remote PowerShell, Admin Center, automation fail</td><td>Enter-PSSession se 100 servers remotely manage</td></tr>
+<tr><td>BitLocker</td><td>Full disk encryption</td><td>Drive chori/disposal par data leak, compliance fail</td><td>Laptop/server disk encrypted — chori par data safe</td></tr>
+<tr><td>AppLocker</td><td>Application whitelisting</td><td>Koi bhi exe/script chal sakta, malware risk</td><td>Sirf approved apps allow, ransomware exe block</td></tr>
+</table>
+
+<h2 class="section" id="tier3"><span class="tier3">Tier 3</span> — Nice to Have / Specific Need</h2>
+<table>
+<tr><th>Service</th><th>Kya hai / Purpose</th><th>Bina iske kya hoga</th><th>Real use case</th></tr>
+<tr><td>DirectAccess</td><td>Always-on seamless VPN (legacy)</td><td>Manual VPN connect (ab Always-On VPN preferred)</td><td>Laptop office ke bahar bhi auto-connected</td></tr>
+<tr><td>Storage Spaces / Replica</td><td>Software RAID + block replication</td><td>Hardware RAID dependency, no built-in DR repl</td><td>Cheap disks se resilient pool; site-to-site replica</td></tr>
+<tr><td>iSCSI Target</td><td>Server ko block/SAN storage banata hai</td><td>Dedicated SAN hardware chahiye</td><td>Hyper-V cluster ke liye shared storage software se</td></tr>
+<tr><td>Windows Containers</td><td>Lightweight app isolation</td><td>App dependencies clash, slow deploy</td><td>Microservice container mein fast deploy</td></tr>
+<tr><td>Windows Admin Center</td><td>Modern web-based GUI management</td><td>RDP/MMC dependency, no multi-server view</td><td>Browser se saare servers ek dashboard mein</td></tr>
+<tr><td>Application Server</td><td>(Legacy) .NET app hosting role</td><td>Modern apps IIS/containers use karte hain</td><td>Purani .NET enterprise apps ke liye</td></tr>
+</table>
+
+<h2 class="section" id="dep">Dependency Chain (kya kis par depend karta hai)</h2>
+<pre>DNS  &lt;--- AD DS &lt;--- Group Policy, File perms (Kerberos), AD CS, NPS
+ |
+ +-- DHCP (clients ko DNS deta hai)
+
+AD DS ---&gt; foundation for: Certificates (AD CS), RADIUS (NPS),
+           VPN auth (RRAS), DFS, RDS licensing</pre>
+<div class="box danger"><b>Bottom line:</b> <b>DNS + AD DS</b> sabse critical — ye girein to poora domain down. Inke upar baaki sab build hota hai.</div>
+
+<p style="margin-top:40px;color:#94a3b8;font-size:13px;border-top:1px solid #334155;padding-top:16px"><a href="index.html">← Back to Main Guide</a> · Core Services Reference · Field Engineer Toolkit</p>
+</main>
+</div>
+</body>
+</html>

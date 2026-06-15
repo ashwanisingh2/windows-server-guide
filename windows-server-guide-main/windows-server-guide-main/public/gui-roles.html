@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUI Guide — Print / Hyper-V / Backup / PKI</title>
+<link rel="stylesheet" href="gui-style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>Advanced Roles GUI</h1>
+<div class="sub">Print · Hyper-V · Backup · PKI</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">GUI Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
+<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
+<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
+<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
+<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
+<a class="nav" href="gui-troubleshooting.html">🔧 Troubleshooting Master Guide</a>
+<a class="nav" href="gui-core-services.html">📦 Core Services Reference</a>
+<a class="nav" href="gui-methodology.html">📘 Documentation Methodology</a>
+<div class="nav-group">On This Page</div>
+<a class="nav" href="#print">Print Server</a>
+<a class="nav" href="#hyperv">Hyper-V</a>
+<a class="nav" href="#backup">Backup &amp; DR</a>
+<a class="nav" href="#pki">Certificate Services (PKI)</a>
+</nav>
+<main class="content">
+<div class="hero"><h1>⚙️ Advanced Roles (GUI)</h1><p>Print Server, Hyper-V, Backup, PKI — Server Manager se click-by-click.</p></div>
+<div class="kqk"><div class="hd">📌 Is page ka context</div><div class="lbl">KYA</div><div class="txt">Print Server, Hyper-V, Backup/DR aur PKI roles install + configure karna.</div><div class="lbl">KYU</div><div class="txt">Centralized printing, virtualization, disaster recovery aur internal certificates — scalability + security.</div><div class="lbl">KAISE</div><div class="txt">Add Roles and Features se har role install → respective console se configure. Neeche steps.</div></div>
+
+<h2 class="section" id="print">Print Server</h2>
+<ol>
+<li>Add Roles and Features → Server Roles → ✅ <b>Print and Document Services</b> → Install</li>
+<li>Tools → <span class="click">Print Management</span></li>
+<li>Print Servers → server → right-click <b>Printers</b> → Add Printer → TCP/IP → printer IP daalo</li>
+<li>Driver select → Share name do → Finish</li>
+</ol>
+<div class="box tip"><b>💡</b> GPO se printer deploy: Print Management → right-click printer → Deploy with Group Policy.</div>
+
+<h2 class="section" id="hyperv">Hyper-V</h2>
+<ol>
+<li>Add Roles and Features → ✅ <b>Hyper-V</b> → NIC select → Install → reboot</li>
+<li>Tools → <span class="click">Hyper-V Manager</span></li>
+<li>Right-click server → <b>Virtual Switch Manager</b> → New → External/Internal/Private → Apply</li>
+<li>Right-click server → <span class="click">New</span> → Virtual Machine → wizard follow (Gen2, memory, VHD, switch)</li>
+</ol>
+<div class="box warn"><b>⚠️</b> Checkpoint ≠ Backup. Production DB/DC par lambe checkpoints mat rakho.</div>
+
+<h2 class="section" id="backup">Backup &amp; DR (Windows Server Backup)</h2>
+<ol>
+<li>Add Roles and Features → Features → ✅ <b>Windows Server Backup</b> → Install</li>
+<li>Tools → <span class="click">Windows Server Backup</span> → Local Backup</li>
+<li>Right-click → <span class="click">Backup Schedule</span> → wizard</li>
+<li>✅ Full server + ✅ <b>System State</b> (AD recovery ke liye CRITICAL) → target disk → time set → Finish</li>
+</ol>
+<table><tr><th>Metric</th><th>Define</th></tr><tr><td>RPO</td><td>Max data loss (e.g. 24h)</td></tr><tr><td>RTO</td><td>Max downtime (e.g. 4h)</td></tr><tr><td>Restore drill</td><td>Monthly test</td></tr></table>
+<div class="box danger"><b>⚠️</b> Tested backup = backup. Untested = hope. 3-2-1 rule: 3 copies, 2 media, 1 offsite.</div>
+
+<h2 class="section" id="pki">Certificate Services (PKI)</h2>
+<ol>
+<li>Add Roles and Features → ✅ <b>Active Directory Certificate Services</b> → ✅ Certification Authority + Web Enrollment → Install</li>
+<li>Yellow flag → <span class="click">Configure Active Directory Certificate Services</span></li>
+<li>Enterprise CA → Root CA → New private key → SHA256, 4096-bit → validity 10 years → Configure</li>
+</ol>
+<div class="box warn"><b>⚠️</b> Production best practice: Offline Root CA + Online Subordinate (Issuing) CA. CA name baad mein change nahi hota — pehle final karo.</div>
+<p style="margin-top:40px;color:#94a3b8;font-size:13px;border-top:1px solid #334155;padding-top:16px"><a href="index.html">← Back to Main Guide</a> · Advanced Roles GUI Guide</p>
+</main>
+</div>
+</body>
+</html>

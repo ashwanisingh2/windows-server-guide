@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documentation Methodology</title>
+<link rel="stylesheet" href="gui-style.css">
+<style>pre{background:var(--code);border:1px solid var(--border);border-radius:8px;padding:14px;overflow-x:auto;margin:12px 0;color:#7dd3fc;font-family:Consolas,monospace;font-size:13px;line-height:1.5}</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>Documentation Methodology</h1>
+<div class="sub">Framework · Process · Standards</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">GUI Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
+<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
+<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
+<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
+<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
+<a class="nav" href="gui-troubleshooting.html">🔧 Troubleshooting Master Guide</a>
+<a class="nav" href="gui-core-services.html">📦 Core Services Reference</a>
+<a class="nav" href="gui-methodology.html">📘 Documentation Methodology</a>
+<div class="nav-group">Framework</div>
+<a class="nav" href="#types">1. Document Type Decision</a>
+<a class="nav" href="#template">2. Template Structure</a>
+<a class="nav" href="#writing">3. Writing Standards</a>
+<a class="nav" href="#visual">4. Visual Standards</a>
+<a class="nav" href="#review">5. Review Process</a>
+<a class="nav" href="#publish">6. Publishing &amp; Maintenance</a>
+<a class="nav" href="#enterprise">7. Enterprise-grade</a>
+<a class="nav" href="#kqk">Kya/Kyu/Kaise Pattern</a>
+</nav>
+<main class="content">
+<div class="hero"><h1>📘 Documentation Methodology</h1><p>Windows Server guides banane ka professional framework — process, standards, quality. Pre-built content nahi, sirf method.</p></div>
+<div class="kqk"><div class="hd">📌 Is page ka context</div><div class="lbl">KYA</div><div class="txt">Documentation banane ka end-to-end framework: type → template → writing → visual → review → publish.</div><div class="lbl">KYU</div><div class="txt">Consistent, tested, versioned docs = faster troubleshooting, easy handover, audit-ready.</div><div class="lbl">KAISE</div><div class="txt">Neeche 7-part framework follow karo. Har doc par ye standards apply karo.</div></div>
+
+<h2 class="section" id="types">1. Document Type Decision</h2>
+<table>
+<tr><th>Type</th><th>Kya hai</th><th>Kab use karein</th></tr>
+<tr><td>KB Article</td><td>Ek specific problem + solution</td><td>"Error X aaya, fix kaise"</td></tr>
+<tr><td>Runbook</td><td>Step-by-step operational procedure</td><td>Repeated task (backup, restart, failover)</td></tr>
+<tr><td>SOP</td><td>Standard process + roles + approvals</td><td>Compliance/governed process (onboarding)</td></tr>
+<tr><td>Architecture Doc</td><td>Design, decisions, diagrams</td><td>"System kaise bana aur kyu"</td></tr>
+</table>
+<div class="box tip"><b>💡 Decision rule:</b> Problem fix? → KB. Task repeat? → Runbook. Process + accountability? → SOP. Design + why? → Architecture.</div>
+
+<h2 class="section" id="template">2. Template Structure</h2>
+<p><b>Header (har doc):</b> Title · Doc ID · Version · Author · Last updated · Reviewer · Audience level · Status (Draft/Approved/Deprecated).</p>
+<p><b>Section order:</b></p>
+<pre>Purpose -> Scope -> Prerequisites -> Procedure ->
+Validation -> Rollback -> Troubleshooting -> References -> Change log</pre>
+<p><b>Version control:</b> Semantic (v1.2 = major.minor). Change log table har version mein "kya badla, kisne, kab". Git/Confluence history backup.</p>
+
+<h2 class="section" id="writing">3. Writing Standards</h2>
+<ul>
+<li><b>Active voice, imperative:</b> "Run the command" not "command should be run"</li>
+<li><b>Audience tag:</b> L1 (follow steps), L2 (understand + adapt), L3 (design). Top par batao kis level ke liye</li>
+<li><b>Assumptions explicit:</b> "Assumes domain-joined server, admin rights" — kuch implied mat chhodo</li>
+<li><b>Consistent terminology:</b> Ek cheez = ek naam (DC ya domain controller, ek choose karo)</li>
+</ul>
+
+<h2 class="section" id="visual">4. Visual Standards</h2>
+<table>
+<tr><th>Need</th><th>Tool</th><th>Kab</th></tr>
+<tr><td>Architecture / network diagram</td><td>Draw.io (free) / Visio (enterprise) / Lucidchart (collab)</td><td>Topology, flow</td></tr>
+<tr><td>Screenshots</td><td>Greenshot (free) / Snagit (rich annotate)</td><td>UI steps</td></tr>
+</table>
+<p><b>Annotation style:</b> Red box = action area, numbered arrows = sequence, blur = sensitive data. Consistent across all docs.</p>
+
+<h2 class="section" id="review">5. Review Process</h2>
+<ul>
+<li><b>Technical review:</b> SME commands/accuracy validate kare — actually test kare</li>
+<li><b>Peer review checklist:</b> Clear? Complete? Reproducible? No assumptions? Rollback present?</li>
+<li><b>Approval workflow:</b> Author → Technical reviewer → Approver (lead) → Published. Status field update.</li>
+</ul>
+
+<h2 class="section" id="publish">6. Publishing &amp; Maintenance</h2>
+<table>
+<tr><th>Platform</th><th>Best for</th></tr>
+<tr><td>Git (Markdown/Pages)</td><td>Version control, code-near docs, diff history</td></tr>
+<tr><td>Confluence</td><td>Team collab, rich editing, search</td></tr>
+<tr><td>SharePoint</td><td>M365 orgs, document governance</td></tr>
+</table>
+<ul>
+<li><b>Update frequency:</b> Review every 6 months ya jab system change ho</li>
+<li><b>Deprecation policy:</b> Outdated doc "Deprecated" mark + link to replacement (delete mat karo, history rahe)</li>
+</ul>
+
+<h2 class="section" id="enterprise">7. Enterprise-grade kya banata hai</h2>
+<ul>
+<li><b>Microsoft Docs style:</b> Task-focused, prerequisites upfront, "Next steps" links, copy buttons</li>
+<li><b>AWS/Azure pattern:</b> Conceptual → How-to → Reference separation; consistent template; tested examples</li>
+<li><b>Enterprise =</b> Consistency + tested + versioned + owned (naam) + discoverable (search/index)</li>
+</ul>
+
+<h2 class="section" id="kqk">Kya / Kyu / Kaise Pattern (is site ka standard)</h2>
+<p>Is website mein har guide page ke top par ek <b>Kya / Kyu / Kaise</b> box hota hai. Reason:</p>
+<table>
+<tr><th>Element</th><th>Kya batata hai</th></tr>
+<tr><td><b>KYA</b></td><td>Page kis cheez ke baare mein hai (scope)</td></tr>
+<tr><td><b>KYU</b></td><td>Ye kyu zaroori hai (business/technical reason)</td></tr>
+<tr><td><b>KAISE</b></td><td>High-level approach — detail neeche</td></tr>
+</table>
+<div class="box tip"><b>💡</b> Ye pattern reader ko 5 second mein context deta hai — padhna jaari rakhna hai ya nahi, turant pata chal jaata hai.</div>
+
+<p style="margin-top:40px;color:#94a3b8;font-size:13px;border-top:1px solid #334155;padding-top:16px"><a href="index.html">← Back to Main Guide</a> · Documentation Methodology · Field Engineer Toolkit</p>
+</main>
+</div>
+</body>
+</html>

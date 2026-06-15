@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUI Guide — DNS Configuration</title>
+<link rel="stylesheet" href="gui-style.css">
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>DNS GUI Guide</h1>
+<div class="sub">DNS Manager · Click-by-click</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">GUI Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
+<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
+<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
+<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
+<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
+<div class="nav-group">On This Page</div>
+<a class="nav" href="#open">Open DNS Manager</a>
+<a class="nav" href="#fwd">Forward Lookup Zone</a>
+<a class="nav" href="#rev">Reverse Lookup Zone</a>
+<a class="nav" href="#records">A / CNAME / MX Records</a>
+<a class="nav" href="#fwdr">Forwarders</a>
+<a class="nav" href="#cond">Conditional Forwarder</a>
+<a class="nav" href="#scav">Scavenging</a>
+<a class="nav" href="#val">Validate</a>
+</nav>
+<main class="content">
+<div class="hero"><h1>🌐 DNS Configuration (GUI)</h1><p>Forward/Reverse zones, records, forwarders — DNS Manager se, click-by-click.</p></div>
+<div class="kqk"><div class="hd">📌 Is page ka context</div><div class="lbl">KYA</div><div class="txt">DNS zones (forward/reverse), records (A/CNAME/MX), forwarders aur scavenging configure karna.</div><div class="lbl">KYU</div><div class="txt">DNS AD ki backbone hai. Iske bina domain, internet aur email kuch nahi chalta.</div><div class="lbl">KAISE</div><div class="txt">DNS Manager (dnsmgmt.msc) se zones banao, records add karo, forwarders set karo. Neeche steps.</div></div>
+<div class="box danger"><b>⚠️</b> DNS galat config = domain, internet, email sab fail. Change se pehle current records note karo.</div>
+
+<h2 class="section" id="open">Open DNS Manager</h2>
+<p>Server Manager → <span class="click">Tools</span> → <span class="click">DNS</span> &nbsp; ya &nbsp; <kbd>Win+R</kbd> → <kbd>dnsmgmt.msc</kbd></p>
+<p>AD install ke baad Forward Lookup Zone (corp.company.local) already bana hota hai.</p>
+
+<h2 class="section" id="fwd">Forward Lookup Zone banao</h2>
+<ol>
+<li>DNS Manager → expand server → right-click <b>Forward Lookup Zones</b> → <span class="click">New Zone</span></li>
+<li>Welcome → Next</li>
+<li>Zone Type → <b>Primary zone</b> + ✅ <b>Store zone in Active Directory</b> → Next</li>
+<li>Replication scope → <b>To all DNS servers in this domain</b> → Next</li>
+<li>Zone name → <kbd>corp.company.local</kbd> → Next</li>
+<li>Dynamic Update → <b>Allow only secure dynamic updates</b> → Next → Finish</li>
+</ol>
+<div class="box tip"><b>💡</b> AD-integrated + secure updates = best practice (auto replicate, secure).</div>
+
+<h2 class="section" id="rev">Reverse Lookup Zone banao (PTR ke liye)</h2>
+<ol>
+<li>Right-click <b>Reverse Lookup Zones</b> → <span class="click">New Zone</span></li>
+<li>Primary + Store in AD → Next</li>
+<li><b>IPv4 Reverse Lookup Zone</b> → Next</li>
+<li>Network ID: <kbd>192.168.1</kbd> → Next</li>
+<li>Secure dynamic updates → Next → Finish</li>
+</ol>
+<div class="box warn"><b>⚠️ KYU:</b> Reverse zone na ho to email delivery (PTR check) aur security tools fail karte hain.</div>
+
+<h2 class="section" id="records">Records add karo (A / CNAME / MX)</h2>
+<p>Forward zone par right-click → record type choose:</p>
+<table>
+<tr><th>Record</th><th>Kab</th><th>Example</th></tr>
+<tr><td>A</td><td>Hostname → IP</td><td>fs01 → 192.168.1.20</td></tr>
+<tr><td>CNAME</td><td>Alias</td><td>intranet → fs01.corp.company.local</td></tr>
+<tr><td>MX</td><td>Mail server</td><td>mail.corp.company.local (priority 10)</td></tr>
+</table>
+<ol>
+<li>Zone right-click → <span class="click">New Host (A)</span></li>
+<li>Name + IP daalo → ✅ "Create associated PTR record" → <span class="click">Add Host</span></li>
+</ol>
+
+<h2 class="section" id="fwdr">Forwarders (internet resolution)</h2>
+<ol>
+<li>DNS Manager → right-click <b>server name</b> → <span class="click">Properties</span></li>
+<li><b>Forwarders</b> tab → <span class="click">Edit</span></li>
+<li>Public DNS daalo: <kbd>8.8.8.8</kbd>, <kbd>1.1.1.1</kbd> → OK</li>
+</ol>
+
+<h2 class="section" id="cond">Conditional Forwarder (external domain)</h2>
+<ol>
+<li>Right-click <b>Conditional Forwarders</b> → <span class="click">New Conditional Forwarder</span></li>
+<li>Domain: <kbd>partner.com</kbd>, IP: partner's DNS → OK</li>
+</ol>
+
+<h2 class="section" id="scav">Scavenging (stale records cleanup)</h2>
+<ol>
+<li>Right-click server → Properties → <b>Advanced</b> tab</li>
+<li>✅ Enable automatic scavenging → interval 7 days → OK</li>
+</ol>
+<div class="box danger"><b>⚠️</b> Scavenging aggressive ho to valid records delete ho jaate. Intervals samajh ke set karo.</div>
+
+<h2 class="section" id="val">Validate</h2>
+<ul>
+<li>CMD: <kbd>nslookup corp.company.local</kbd></li>
+<li><kbd>nslookup fs01.corp.company.local</kbd></li>
+<li><kbd>nslookup google.com</kbd> (forwarder test)</li>
+</ul>
+<p style="margin-top:40px;color:#94a3b8;font-size:13px;border-top:1px solid #334155;padding-top:16px"><a href="index.html">← Back to Main Guide</a> · DNS GUI Guide</p>
+</main>
+</div>
+</body>
+</html>

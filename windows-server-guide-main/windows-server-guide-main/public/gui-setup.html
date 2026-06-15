@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GUI Setup Guide — Server Manager</title>
+<style>
+:root{--bg:#0f172a;--panel:#1e293b;--accent:#3b82f6;--accent2:#22c55e;--warn:#f59e0b;--danger:#ef4444;--text:#e2e8f0;--muted:#94a3b8;--code:#0b1220;--border:#334155}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
+a{color:var(--accent);text-decoration:none}
+.layout{display:flex;min-height:100vh}
+.sidebar{width:300px;background:var(--panel);border-right:1px solid var(--border);position:fixed;top:0;bottom:0;overflow-y:auto;padding:20px}
+.sidebar h1{font-size:18px;color:#fff;margin-bottom:4px}
+.sidebar .sub{font-size:12px;color:var(--muted);margin-bottom:16px}
+.nav-group{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent2);margin:16px 0 6px}
+.sidebar a.nav{display:block;padding:6px 10px;border-radius:6px;color:var(--text);font-size:13px;margin-bottom:2px}
+.sidebar a.nav:hover{background:var(--bg)}
+.sidebar a.back{display:block;padding:8px 10px;border-radius:6px;background:var(--accent);color:#fff;font-size:13px;margin-bottom:12px;text-align:center}
+.content{margin-left:300px;padding:40px 56px;max-width:1000px}
+h2.section{font-size:28px;color:#fff;margin:48px 0 8px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
+h3.step{font-size:20px;color:#fff;margin:32px 0 10px}
+h4{font-size:15px;color:var(--accent2);margin:18px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+p{margin:8px 0;color:var(--text)}
+ol,ul{margin:10px 0 10px 24px}
+li{margin:6px 0}
+kbd{background:var(--code);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-family:monospace;font-size:12px;color:#7dd3fc}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{border:1px solid var(--border);padding:8px 10px;text-align:left}
+th{background:var(--code);color:var(--accent2)}
+.box{border-radius:8px;padding:12px 16px;margin:14px 0;border-left:4px solid}
+.warn{background:rgba(245,158,11,.1);border-color:var(--warn)}
+.tip{background:rgba(34,197,94,.1);border-color:var(--accent2)}
+.danger{background:rgba(239,68,68,.1);border-color:var(--danger)}
+.box b{color:#fff}
+.hero{background:linear-gradient(135deg,#1e3a8a,#0f172a);padding:40px;border-radius:12px;margin-bottom:20px}
+.hero h1{font-size:32px;color:#fff}
+.hero p{color:var(--muted);font-size:15px}
+.click{background:var(--code);border:1px solid var(--border);border-radius:6px;padding:2px 8px;color:#fbbf24;font-size:13px;font-family:monospace}
+@media(max-width:800px){.sidebar{position:static;width:100%}.content{margin-left:0;padding:20px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="sidebar">
+<h1>GUI Setup Guide</h1>
+<div class="sub">Server Manager · Click-by-click</div>
+<a class="back" href="index.html">← Back to Main Guide</a>
+<div class="nav-group">GUI Guides</div>
+<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
+<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
+<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
+<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
+<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
+<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
+<a class="nav" href="gui-troubleshooting.html">🔧 Troubleshooting Master Guide</a>
+<a class="nav" href="gui-core-services.html">📦 Core Services Reference</a>
+<a class="nav" href="gui-methodology.html">📘 Documentation Methodology</a>
+<div class="nav-group">On This Page (AD + DHCP)</div>
+<a class="nav" href="#prep">Before You Start</a>
+<a class="nav" href="#open">Open Server Manager</a>
+<a class="nav" href="#ad1">AD: Install Role</a>
+<a class="nav" href="#ad2">AD: Promote to DC</a>
+<a class="nav" href="#ad3">AD: Validate</a>
+<a class="nav" href="#dhcp1">DHCP: Install Role</a>
+<a class="nav" href="#dhcp2">DHCP: Authorize</a>
+<a class="nav" href="#dhcp3">DHCP: Create Scope</a>
+<a class="nav" href="#dhcp4">DHCP: Validate</a>
+<a class="nav" href="#tools">Tools Reference</a>
+<a class="nav" href="#trouble">Agar Galat Ho Jaye</a>
+</nav>
+<main class="content">
+<div class="hero">
+<h1>🖥️ GUI Setup Guide</h1>
+<p>Active Directory + DHCP setup using Server Manager — bina PowerShell, sirf clicks. Step-by-step Hinglish.</p>
+</div>
+<div class="kqk"><div class="hd">📌 Is page ka context</div><div class="lbl">KYA</div><div class="txt">Server ko Domain Controller banana + DHCP role setup karna (GUI se).</div><div class="lbl">KYU</div><div class="txt">AD = centralized identity, DHCP = auto IP. Inke bina network aur user management impossible.</div><div class="lbl">KAISE</div><div class="txt">Server Manager → Add Roles → Promote to DC → DHCP install → authorize → scope. Neeche step-by-step.</div></div>
+
+<div class="box danger"><b>⚠️ PRODUCTION:</b> Pehle snapshot/backup lo · Console/iLO access ready rakho (RDP gir sakta hai) · Off-hours/maintenance window mein karo.</div>
+
+<h2 class="section" id="prep">Before You Start</h2>
+<p>Ye values pehle decide karke likh lo (example diye hain — apne network ke daalo):</p>
+<table>
+<tr><th>Item</th><th>Example</th><th>Aapka value</th></tr>
+<tr><td>Server Name</td><td>DC01</td><td>______</td></tr>
+<tr><td>Domain Name</td><td>corp.company.local</td><td>______</td></tr>
+<tr><td>Server Static IP</td><td>192.168.1.10</td><td>______</td></tr>
+<tr><td>Subnet / Gateway</td><td>255.255.255.0 / 192.168.1.1</td><td>______</td></tr>
+<tr><td>DHCP Scope Range</td><td>192.168.1.100 - 192.168.1.200</td><td>______</td></tr>
+<tr><td>DSRM Password</td><td>(strong, yaad rakho)</td><td>______</td></tr>
+</table>
+<div class="box warn"><b>⚠️</b> DC banane se pehle server par <b>static IP</b> set hona chahiye. DC kabhi DHCP par nahi chalta.</div>
+
+<h2 class="section" id="open">Open Server Manager</h2>
+<p>Start menu → <span class="click">Server Manager</span> &nbsp; ya &nbsp; <kbd>Win + R</kbd> → type <kbd>servermanager</kbd> → Enter.</p>
+<p>Ye central dashboard hai jahan se saare roles install/manage hote hain.</p>
+
+<h2 class="section" id="ad1">AD Step 1: Install Role</h2>
+<ol>
+<li>Server Manager → top-right <span class="click">Manage</span> → <span class="click">Add Roles and Features</span></li>
+<li>"Before You Begin" → <span class="click">Next</span></li>
+<li>Installation Type → <b>Role-based or feature-based installation</b> → <span class="click">Next</span></li>
+<li>Server Selection → apna server select → <span class="click">Next</span></li>
+<li>Server Roles → ✅ tick <b>Active Directory Domain Services</b></li>
+<li>Popup "Add features?" → <span class="click">Add Features</span></li>
+<li><span class="click">Next</span> → <span class="click">Next</span> → <span class="click">Next</span> → <span class="click">Install</span></li>
+<li>Install hone do (abhi reboot nahi hoga)</li>
+</ol>
+
+<h2 class="section" id="ad2">AD Step 2: Promote to Domain Controller</h2>
+<ol>
+<li>Install ke baad Server Manager mein top par <b>yellow ⚠️ flag</b> dikhega → click</li>
+<li><span class="click">Promote this server to a domain controller</span></li>
+<li>Deployment Configuration → <b>Add a new forest</b> (nayi company / pehla DC)</li>
+<li>Root domain name: <kbd>corp.company.local</kbd> → <span class="click">Next</span></li>
+<li>Domain Controller Options → functional level default → <b>DSRM password</b> daalo (yaad rakho!) → <span class="click">Next</span></li>
+<li>DNS Options → warning ignore → <span class="click">Next</span></li>
+<li>Additional Options → NetBIOS auto (CORP) → <span class="click">Next</span></li>
+<li>Paths → NTDS/SYSVOL location (default ya alag disk) → <span class="click">Next</span></li>
+<li>Review → <span class="click">Next</span></li>
+<li>Prerequisites Check → green tick → <span class="click">Install</span></li>
+<li>Server <b>automatic reboot</b> hoga</li>
+</ol>
+<div class="box tip"><b>💡 TIP:</b> Production mein NTDS/SYSVOL alag disk (E:) par rakho — better performance + recovery.</div>
+
+<h2 class="section" id="ad3">AD Step 3: Validate</h2>
+<p>Reboot ke baad Server Manager → <span class="click">Tools</span> menu mein ab ye dikhega:</p>
+<ul>
+<li><b>Active Directory Users and Computers</b> — users/OU manage</li>
+<li><b>Active Directory Sites and Services</b> — replication</li>
+<li><b>DNS</b> — zones auto-create ho gaye</li>
+</ul>
+<p>Kholo aur confirm domain <kbd>corp.company.local</kbd> dikh raha hai. DNS console mein Forward Lookup Zone bani honi chahiye.</p>
+
+<h2 class="section" id="dhcp1">DHCP Step 1: Install Role</h2>
+<ol>
+<li>Server Manager → <span class="click">Manage</span> → <span class="click">Add Roles and Features</span></li>
+<li>Next → Next → Next → Server Roles → ✅ <b>DHCP Server</b></li>
+<li>"Add Features" → <span class="click">Add Features</span></li>
+<li>Next → Next → <span class="click">Install</span></li>
+</ol>
+
+<h2 class="section" id="dhcp2">DHCP Step 2: Authorize in AD</h2>
+<div class="box warn"><b>⚠️ KYU:</b> Bina authorization ke Windows DHCP leases nahi deta (rogue DHCP protection).</div>
+<ol>
+<li>Install ke baad <b>yellow ⚠️ flag</b> → click</li>
+<li><span class="click">Complete DHCP configuration</span></li>
+<li>Authorization step → domain admin credentials → <span class="click">Commit</span> → <span class="click">Close</span></li>
+</ol>
+
+<h2 class="section" id="dhcp3">DHCP Step 3: Create Scope</h2>
+<ol>
+<li>Server Manager → <span class="click">Tools</span> → <span class="click">DHCP</span></li>
+<li>Expand: Server name → <b>IPv4</b> → right-click → <span class="click">New Scope</span></li>
+<li><b>Name:</b> LAN-Clients → Next</li>
+<li><b>IP Range:</b> Start <kbd>192.168.1.100</kbd>, End <kbd>192.168.1.200</kbd>, Subnet <kbd>255.255.255.0</kbd> → Next</li>
+<li><b>Exclusions:</b> <kbd>192.168.1.1</kbd> to <kbd>192.168.1.20</kbd> (servers/printers ke liye) → Next</li>
+<li><b>Lease duration:</b> 8 days (default) → Next</li>
+<li>"Configure options now?" → <b>Yes</b> → Next</li>
+<li><b>Router/Gateway:</b> <kbd>192.168.1.1</kbd> → Add → Next</li>
+<li><b>DNS:</b> Domain <kbd>corp.company.local</kbd>, Server IP <kbd>192.168.1.10</kbd> → Next</li>
+<li>WINS → skip → Next</li>
+<li><b>Activate scope now?</b> → Yes → Next → Finish</li>
+</ol>
+
+<h2 class="section" id="dhcp4">DHCP Step 4: Validate</h2>
+<ul>
+<li>DHCP console → Scope → <b>Address Leases</b> mein clients dikhenge</li>
+<li>Client PC par CMD: <kbd>ipconfig /release</kbd> phir <kbd>ipconfig /renew</kbd></li>
+<li>Client ko IP 192.168.1.100-200 range se milna chahiye, DNS = 192.168.1.10</li>
+</ul>
+<div class="box tip"><b>💡 Reservation:</b> Printer/server ko fixed IP dena ho → Scope → Reservations → right-click → New Reservation → MAC + IP daalo.</div>
+
+<h2 class="section" id="tools">Tools Menu Reference</h2>
+<table>
+<tr><th>Kaam</th><th>Server Manager → Tools →</th></tr>
+<tr><td>Users / groups / OU</td><td>Active Directory Users and Computers</td></tr>
+<tr><td>Replication / sites</td><td>AD Sites and Services</td></tr>
+<tr><td>DNS zones / records</td><td>DNS</td></tr>
+<tr><td>DHCP scopes / leases</td><td>DHCP</td></tr>
+<tr><td>Group Policy</td><td>Group Policy Management</td></tr>
+</table>
+<div class="box tip"><b>💡</b> Server Manager → <b>All Servers</b> se multiple servers ek console se manage karo. Right-click → Add Servers.</div>
+
+<h2 class="section" id="trouble">Agar Galat Ho Jaye</h2>
+<table>
+<tr><th>Problem</th><th>Fix</th></tr>
+<tr><td>Promotion fail</td><td>Check <kbd>C:\Windows\debug\dcpromo.log</kbd></td></tr>
+<tr><td>DHCP leases nahi mil rahe</td><td>Authorize hua? DHCP console → right-click server → Authorize</td></tr>
+<tr><td>Client ko IP nahi</td><td>Scope <b>active</b> hai? Exclusion overlap to nahi?</td></tr>
+<tr><td>DNS resolve nahi</td><td>Client ka DNS = DC ka IP (192.168.1.10) hona chahiye</td></tr>
+<tr><td>RDP gir gaya IP change pe</td><td>Console/iLO/iDRAC se access — isiliye ready rakhte hain</td></tr>
+</table>
+
+<p style="margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);padding-top:16px"><a href="index.html">← Back to Main Guide</a> · GUI Setup Guide · Field Engineer Toolkit</p>
+</main>
+</div>
+</body>
+</html>
