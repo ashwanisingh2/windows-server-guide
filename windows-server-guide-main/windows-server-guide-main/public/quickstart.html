@@ -1,43 +1,56 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi-Latn">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Quick Start — Windows Server Guide (सरल)</title>
+  <meta name="description" content="Windows Server beginner ke liye 5-minute setup path.">
+  <title>5-Minute Quick Start — Windows Server</title>
   <link rel="stylesheet" href="gui-style.css">
-  <style>body{padding:28px;max-width:900px;margin:auto}</style>
 </head>
-<body>
-  <h1>Quick Start — जल्दी शुरू करें</h1>
-  <p>ये पेज उन लोगों के लिए है जो "जल्दी काम चलाना" चाहते हैं — सबसे जरूरी कदम, आसान भाषा में.</p>
+<body class="standalone-page">
+  <a class="skip-link" href="#main-content">Main content par jao</a>
+  <main class="standalone-content" id="main-content">
+    <a class="back-link" href="index.html">← Main Guide</a>
+    <header class="hero compact-hero">
+      <span class="eyebrow">5-MINUTE QUICK START</span>
+      <h1>Confuse mat ho — bas is order mein chalo.</h1>
+      <p>Beginner hain to pehle lab mein practice karein. Production mein direct changes na karein.</p>
+    </header>
 
-  <h2>5-मिनट चेकलिस्ट (सबसे जरूरी)</h2>
-  <ol>
-    <li>Lab बनाएं: VirtualBox पर VM बनाकर practice करें — <a href="gui-lab-setup.html">Lab Setup</a></li>
-    <li>पहला DC बनाएं: Server पर AD DS इंस्टॉल और Promote करें — <a href="gui-setup.html#ad2">AD Promote</a></li>
-    <li>DNS चेक करें: क्लाइंट का DNS हमेशा DC का IP हो — <a href="gui-dns.html">DNS Guide</a></li>
-    <li>DHCP स्कोप बनाएं: Clients को IP देने के लिए Scope बनाएं — <a href="gui-setup.html#dhcp3">DHCP Scope</a></li>
-    <li>File share बनाएं: Data के लिए एक सरल शेयर और NTFS परमिशन सेट करें — <a href="gui-fileserver.html">File Server</a></li>
-  </ol>
+    <div class="box danger"><b>Start karne se pehle:</b> Snapshot/backup lein, server ka current IP note karein aur admin credentials ready rakhein.</div>
 
-  <h2>अगर कुछ टूटे तो (तेज़ Diagnostic)</h2>
-  <ul>
-    <li>लॉगिन समस्या → Time sync और account lock देखें — <a href="gui-troubleshooting.html#login">Login Troubleshoot</a></li>
-    <li>नाम resolve नहीं हो raha → nslookup और DNS console देखें — <a href="gui-dns.html#val">DNS Validate</a></li>
-    <li>GPO नहीं लग रही → gpupdate / gpresult — <a href="gui-users-gpo.html#val">GPO Validate</a></li>
-  </ul>
+    <section>
+      <div class="section-heading"><div><span class="eyebrow">SETUP PATH</span><h2>6 simple steps</h2></div></div>
+      <ol class="learning-path">
+        <li><span class="step-number">1</span><div><b>Practice lab banayein</b><small>VirtualBox mein Windows Server VM + snapshot.</small></div><a href="gui-lab-setup.html">Guide</a></li>
+        <li><span class="step-number">2</span><div><b>Server prepare karein</b><small>Name set karein, static IP dein, updates install karein.</small></div><a href="gui-setup.html#prep">Guide</a></li>
+        <li><span class="step-number">3</span><div><b>Domain Controller banayein</b><small>AD DS role install karke new forest promote karein.</small></div><a href="gui-setup.html#ad1">Guide</a></li>
+        <li><span class="step-number">4</span><div><b>DNS test karein</b><small>Client DNS ko DC IP par set karke name resolve karein.</small></div><a href="gui-dns.html#val">Guide</a></li>
+        <li><span class="step-number">5</span><div><b>DHCP scope banayein</b><small>Scope, gateway aur DNS options configure karein.</small></div><a href="gui-setup.html#dhcp3">Guide</a></li>
+        <li><span class="step-number">6</span><div><b>User + GPO + share banayein</b><small>Test user se login aur permissions validate karein.</small></div><a href="gui-users-gpo.html">Guide</a></li>
+      </ol>
+    </section>
 
-  <h2>Recommended order (नया होना)</h2>
-  <ol>
-    <li>Lab → AD Promote → DNS/DHCP → Users &amp; GPO → File Server → Backup</li>
-  </ol>
+    <section>
+      <div class="section-heading"><div><span class="eyebrow">SUCCESS CHECK</span><h2>Setup sahi hua?</h2></div></div>
+      <div class="checklist">
+        <label><input type="checkbox"> Server ka IP static hai</label>
+        <label><input type="checkbox"> Client ka DNS, DC ka IP hai</label>
+        <label><input type="checkbox"> Client domain join ho raha hai</label>
+        <label><input type="checkbox"> <code>dcdiag /q</code> error nahi de raha</label>
+        <label><input type="checkbox"> Test user login kar pa raha hai</label>
+        <label><input type="checkbox"> Backup/restore ka test ho gaya</label>
+      </div>
+    </section>
 
-  <p>अगला कदम:</p>
-  <ul>
-    <li>मैं इसे `index.html` में <b>Quick Start</b> लिंक जोड़ दूँ? (हाँ/ना)</li>
-    <li>या क्या आप पूरा पेज हिंदी में और भी सरल (बुलेट-केवल) चाहते हैं?</li>
-  </ul>
-
-  <p style="margin-top:30px"><a href="index.html">← Back to Main Guide</a></p>
+    <section>
+      <div class="section-heading"><div><span class="eyebrow">NEXT ACTION</span><h2>Kahan jana hai?</h2></div></div>
+      <div class="card-grid quick-actions">
+        <a class="action-card link-card" href="gui-lab-setup.html"><span class="card-icon">🧪</span><h3>Lab banayein</h3><p>Safe practice environment.</p></a>
+        <a class="action-card link-card" href="gui-setup.html"><span class="card-icon">🗂️</span><h3>AD + DHCP setup</h3><p>Click-by-click instructions.</p></a>
+        <a class="action-card link-card" href="gui-troubleshooting.html"><span class="card-icon">🔧</span><h3>Problem fix karein</h3><p>Symptoms se diagnosis.</p></a>
+      </div>
+    </section>
+  </main>
 </body>
 </html>

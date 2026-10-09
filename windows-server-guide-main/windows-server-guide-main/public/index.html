@@ -1,288 +1,251 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi-Latn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Windows Server Infrastructure Guide</title>
-<style>
-:root{--bg:#0f172a;--panel:#1e293b;--accent:#3b82f6;--accent2:#22c55e;--warn:#f59e0b;--danger:#ef4444;--text:#e2e8f0;--muted:#94a3b8;--code:#0b1220;--border:#334155}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.65}
-a{color:var(--accent);text-decoration:none}
-.layout{display:flex;min-height:100vh}
-.sidebar{width:300px;background:var(--panel);border-right:1px solid var(--border);position:fixed;top:0;bottom:0;overflow-y:auto;padding:20px}
-.sidebar h1{font-size:18px;color:#fff;margin-bottom:4px}
-.sidebar .sub{font-size:12px;color:var(--muted);margin-bottom:16px}
-#search{width:100%;padding:10px;border-radius:8px;border:1px solid var(--border);background:var(--code);color:var(--text);margin-bottom:16px;font-size:14px}
-.nav-group{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--accent2);margin:16px 0 6px}
-.sidebar a.nav{display:block;padding:6px 10px;border-radius:6px;color:var(--text);font-size:13px;margin-bottom:2px}
-.sidebar a.nav:hover{background:var(--bg)}
-.content{margin-left:300px;padding:40px 56px;max-width:1000px}
-h2.section{font-size:28px;color:#fff;margin:48px 0 8px;padding-bottom:8px;border-bottom:2px solid var(--accent)}
-h3.step{font-size:20px;color:#fff;margin:32px 0 10px}
-h4{font-size:15px;color:var(--accent2);margin:18px 0 6px;text-transform:uppercase;letter-spacing:.5px}
-p{margin:8px 0;color:var(--text)}
-table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
-th,td{border:1px solid var(--border);padding:8px 10px;text-align:left}
-th{background:var(--code);color:var(--accent2)}
-pre{background:var(--code);border:1px solid var(--border);border-radius:8px;padding:14px;overflow-x:auto;margin:12px 0}
-code{font-family:'Cascadia Code',Consolas,monospace;font-size:13px;color:#7dd3fc}
-.box{border-radius:8px;padding:12px 16px;margin:14px 0;border-left:4px solid}
-.warn{background:rgba(245,158,11,.1);border-color:var(--warn)}
-.tip{background:rgba(34,197,94,.1);border-color:var(--accent2)}
-.danger{background:rgba(239,68,68,.1);border-color:var(--danger)}
-.box b{color:#fff}
-.hero{background:linear-gradient(135deg,#1e3a8a,#0f172a);padding:40px;border-radius:12px;margin-bottom:20px}
-.hero h1{font-size:32px;color:#fff}
-.hero p{color:var(--muted);font-size:15px}
-.hidden{display:none!important}
-@media(max-width:800px){.sidebar{position:static;width:100%}.content{margin-left:0;padding:20px}}
-</style>
+<meta name="description" content="Windows Server ko setup aur troubleshoot karne ke liye beginner-friendly Hinglish cheat sheet.">
+<title>Windows Server Easy Cheat Sheet</title>
+<link rel="stylesheet" href="gui-style.css">
 </head>
 <body>
+<a class="skip-link" href="#main-content">Main content par jao</a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="sidebar">☰ Menu</button>
 <div class="layout">
-<nav class="sidebar">
-<h1>Windows Server Guide</h1>
-<div class="sub">Field Engineer Daily Toolkit · Hinglish</div>
-<input id="search" placeholder="🔍 Search guide..." onkeyup="doSearch(this.value)">
-<div class="nav-group">Playbook</div>
-<a class="nav" href="gui-playbook.html">📕 IT Infrastructure Playbook</a>
-  <a class="nav" href="quickstart.html">⚡ Quick Start (सरल)</a>
-  <a class="nav" href="cheatsheet.html">📝 Cheat Sheet (सार)</a>
-<div class="nav-group">GUI Guides (Click-by-Click)</div>
-<a class="nav" href="gui-lab-setup.html">🧪 Lab Setup (VirtualBox)</a>
-<a class="nav" href="gui-setup.html">🗂️ AD + DHCP Setup</a>
-<a class="nav" href="gui-dns.html">🌐 DNS Configuration</a>
-<a class="nav" href="gui-fileserver.html">📁 File Server &amp; Shares</a>
-<a class="nav" href="gui-users-gpo.html">👥 Users, OU &amp; Group Policy</a>
-<a class="nav" href="gui-roles.html">⚙️ Print / Hyper-V / Backup / PKI</a>
-<a class="nav" href="gui-troubleshooting.html">🔧 Troubleshooting Master Guide</a>
-<a class="nav" href="gui-core-services.html">📦 Core Services Reference</a>
-<a class="nav" href="gui-methodology.html">📘 Documentation Methodology</a>
+<nav class="sidebar" id="sidebar" aria-label="Main navigation">
+  <h1>Windows Server Guide</h1>
+  <div class="sub">Easy Hinglish · Step-by-step · Cheat Sheet</div>
+
+  <label class="sr-only" for="guide-search">Guide mein search karein</label>
+  <input class="search" id="guide-search" type="search" placeholder="Search: DNS, DHCP, login..." autocomplete="off">
+
+  <div class="nav-group">Start Here</div>
+  <a class="nav" href="#choose-path">🚀 Apna kaam chunein</a>
+  <a class="nav" href="#learning-path">🗺️ Learning path</a>
+  <a class="nav" href="#quick-checks">✅ Daily checks</a>
+  <a class="nav" href="#troubleshoot">🔧 Troubleshoot fast</a>
+
+  <div class="nav-group">Detailed Guides</div>
+  <a class="nav" href="quickstart.html">⚡ 5-minute Quick Start</a>
+  <a class="nav" href="cheatsheet.html">📝 Printable Cheat Sheet</a>
+  <a class="nav" href="gui-lab-setup.html">🧪 Lab Setup</a>
+  <a class="nav" href="gui-setup.html">🗂️ AD + DHCP</a>
+  <a class="nav" href="gui-dns.html">🌐 DNS</a>
+  <a class="nav" href="gui-users-gpo.html">👥 Users + GPO</a>
+  <a class="nav" href="gui-fileserver.html">📁 File Server</a>
+  <a class="nav" href="gui-troubleshooting.html">🧰 Full Troubleshooting</a>
 </nav>
-<main class="content" id="content">
-<div class="hero">
-<h1>Windows Server Infrastructure Guide</h1>
-<p>Production-ready Implementation &amp; Troubleshooting · Greenfield + Brownfield · Ready-to-run PowerShell</p>
-</div>
-<div class="box danger"><b>⚠️ PRODUCTION RULE #1:</b> Kuch bhi karne se pehle backup/snapshot lo. "Change before backup" = career risk.</div>
-<div class="box tip"><b>💡 TIP:</b> Har command pehle test/non-prod DC par run karke confirm karo, phir production par.</div>
 
-<h2 class="section" id="phase1">Phase 1: Foundation (Day 1-2)</h2>
+<main class="content dashboard" id="main-content">
+  <header class="hero compact-hero">
+    <span class="eyebrow">BEGINNER-FRIENDLY FIELD GUIDE</span>
+    <h1>Windows Server, ab simple language mein.</h1>
+    <p>Kaam chunein, short steps follow karein, phir result validate karein. Har risky change se pehle backup zaroor lein.</p>
+    <div class="hero-actions">
+      <a class="button primary" href="#choose-path">Kaam shuru karein</a>
+      <a class="button secondary" href="cheatsheet.html">Cheat Sheet kholein</a>
+    </div>
+  </header>
 
-<h3 class="step">1. Infrastructure Planning</h3>
-<h4>Engineer ko kya karna hai</h4><p>Deploy se pehle paper/Excel par design lock karo: IP schema, VLAN, domain name, DC IPs, naming.</p>
-<table><tr><th>Item</th><th>Decision</th><th>Example</th></tr><tr><td>IP Schema</td><td>Private + subnet</td><td>10.10.0.0/16</td></tr><tr><td>Server VLAN</td><td>Dedicated</td><td>VLAN 10 → 10.10.10.0/24</td></tr><tr><td>Domain</td><td>Internal</td><td>corp.company.local</td></tr><tr><td>DC IPs</td><td>Static</td><td>DC01=10.10.10.10</td></tr></table>
-<h4>Kyu / Benefit</h4><p>Galat IP/domain design = poora AD rebuild. Ek baar sahi → 5 saal stable.</p>
-<div class="box warn"><b>⚠️</b> Single-label domain (sirf "company") mat rakho. <code>corp.company.local</code> use karo.</div>
+  <div class="box danger" role="alert">
+    <b>Production safety:</b> Backup/snapshot + maintenance window + console/iLO access ke bina network, AD, DNS ya GPO change na karein.
+  </div>
 
-<h3 class="step">2. Server Install &amp; Hardening</h3>
-<pre><code>Rename-Computer -NewName "DC01" -Restart
-Install-Module PSWindowsUpdate -Force
-Get-WindowsUpdate -Install -AcceptAll -AutoReboot
-Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
-Rename-LocalUser -Name "Administrator" -NewName "corpadmin"</code></pre>
-<h4>Kyu / Benefit</h4><p>Default install = open services, weak defaults. Secure baseline = audit ready.</p>
-<div class="box tip"><b>💡 Core vs Full:</b> DC/DNS/DHCP ke liye Server Core prefer karo (kam attack surface).</div>
+  <section class="search-section" id="choose-path" data-search-card>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">STEP 1</span>
+        <h2>Abhi aapko kya karna hai?</h2>
+      </div>
+      <p>Apni situation wala card kholein. Sab kuch ek saath padhne ki zaroorat nahi.</p>
+    </div>
+    <div class="card-grid path-grid">
+      <article class="action-card">
+        <span class="card-icon" aria-hidden="true">🌱</span>
+        <span class="badge beginner">BEGINNER</span>
+        <h3>Main bilkul naya hoon</h3>
+        <p>Safe practice lab se start karein. Production server ki zaroorat nahi.</p>
+        <a class="card-link" href="gui-lab-setup.html">Lab banana seekhein →</a>
+      </article>
+      <article class="action-card">
+        <span class="card-icon" aria-hidden="true">🏗️</span>
+        <span class="badge setup">SETUP</span>
+        <h3>Naya server setup karna hai</h3>
+        <p>Static IP, Active Directory, DNS aur DHCP ko sahi order mein configure karein.</p>
+        <a class="card-link" href="gui-setup.html">Setup guide kholein →</a>
+      </article>
+      <article class="action-card">
+        <span class="card-icon" aria-hidden="true">🧯</span>
+        <span class="badge issue">ISSUE</span>
+        <h3>Kuch kaam nahi kar raha</h3>
+        <p>Login, DNS, DHCP, GPO, share aur replication issues ko symptom se diagnose karein.</p>
+        <a class="card-link" href="#troubleshoot">Fast diagnosis karein →</a>
+      </article>
+    </div>
+  </section>
 
-<h3 class="step">3. Static IP &amp; Network</h3>
-<pre><code>Get-NetAdapter
-New-NetIPAddress -InterfaceIndex 5 -IPAddress 10.10.10.10 -PrefixLength 24 -DefaultGateway 10.10.10.1
-Set-DnsClientServerAddress -InterfaceIndex 5 -ServerAddresses 10.10.10.10</code></pre>
-<div class="box danger"><b>⚠️ PRODUCTION RISK:</b> Remote IP change + RDP connected + galat gateway = lock out. Console/iLO access ready rakho.</div>
+  <section class="search-section" id="learning-path" data-search-card>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">STEP 2</span>
+        <h2>Setup ka sahi order</h2>
+      </div>
+      <p>Ek step validate hone ke baad hi agle step par jaayein.</p>
+    </div>
+    <ol class="learning-path">
+      <li><span class="step-number">1</span><div><b>Lab banao</b><small>VirtualBox, Server VM, snapshot</small></div><a href="gui-lab-setup.html">Open</a></li>
+      <li><span class="step-number">2</span><div><b>Network ready karo</b><small>Server name, static IP, gateway</small></div><a href="gui-setup.html#prep">Open</a></li>
+      <li><span class="step-number">3</span><div><b>AD DS promote karo</b><small>Domain Controller (DC) + DNS</small></div><a href="gui-setup.html#ad1">Open</a></li>
+      <li><span class="step-number">4</span><div><b>DNS + DHCP validate karo</b><small>Name resolution aur client IP</small></div><a href="gui-dns.html#val">Open</a></li>
+      <li><span class="step-number">5</span><div><b>Users, OU aur GPO banao</b><small>Pehle pilot OU par test</small></div><a href="gui-users-gpo.html">Open</a></li>
+      <li><span class="step-number">6</span><div><b>File share + backup</b><small>NTFS permissions aur restore test</small></div><a href="gui-fileserver.html">Open</a></li>
+    </ol>
+  </section>
 
-<h3 class="step">4. Active Directory (First DC)</h3>
-<pre><code>Install-WindowsFeature AD-Domain-Services -IncludeManagementTools
-Install-ADDSForest -DomainName "corp.company.local" -DomainNetbiosName "CORP" `
-  -DatabasePath "E:\NTDS" -SysvolPath "E:\SYSVOL" -LogPath "E:\Logs" -InstallDns:$true -Force</code></pre>
-<h4>Validation</h4>
-<pre><code>dcdiag /v
-Get-ADDomainController
-nltest /dsgetdc:corp.company.local
-Get-Service NTDS,DNS,Netlogon</code></pre>
-<div class="box warn"><b>Agar galat ho jaye:</b> dcpromo.log check karo (C:\Windows\debug). Demote: <code>Uninstall-ADDSDomainController</code>.</div>
+  <section class="search-section" id="golden-rules" data-search-card>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">REMEMBER</span>
+        <h2>6 Golden Rules</h2>
+      </div>
+    </div>
+    <div class="rule-grid">
+      <div class="mini-card"><b>1. DC = Static IP</b><span>Domain Controller par dynamic IP mat rakhein.</span></div>
+      <div class="mini-card"><b>2. Client DNS = DC IP</b><span>Client par public DNS dene se domain issues aayenge.</span></div>
+      <div class="mini-card"><b>3. Backup first</b><span>Change se pehle snapshot/backup aur rollback plan.</span></div>
+      <div class="mini-card"><b>4. Pilot first</b><span>GPO ko pehle 1–5 test computers par lagayein.</span></div>
+      <div class="mini-card"><b>5. Check time</b><span>5 minute se zyada skew Kerberos login tod sakta hai.</span></div>
+      <div class="mini-card"><b>6. Validate every step</b><span>“Command chal gayi” ka matlab “setup sahi hai” nahi.</span></div>
+    </div>
+  </section>
 
-<h3 class="step">5. Additional DC (DC02)</h3>
-<pre><code>Install-ADDSDomainController -DomainName "corp.company.local" -InstallDns:$true `
-  -Credential (Get-Credential) -Force</code></pre>
-<pre><code>repadmin /replsummary
-repadmin /showrepl
-dcdiag /test:replications</code></pre>
-<div class="box warn"><b>⚠️</b> DC02 preferred DNS = DC01, secondary = khud. Islanding avoid karo.</div>
+  <section class="search-section" id="quick-checks" data-search-card>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">DAILY CHEAT SHEET</span>
+        <h2>Quick health checks</h2>
+      </div>
+      <p>Ye checks read-only hain; pehle inka output dekhein, phir change karein.</p>
+    </div>
+    <div class="table-wrap">
+      <table class="cheat-table">
+        <thead><tr><th>Kya check karein</th><th>Command</th><th>Good result</th></tr></thead>
+        <tbody>
+          <tr><td>IP + DNS</td><td><code>ipconfig /all</code></td><td>DC static IP; client DNS = DC IP</td></tr>
+          <tr><td>DNS name</td><td><code>nslookup dc01.&lt;domain&gt;</code></td><td>Sahi hostname aur IP</td></tr>
+          <tr><td>DC health</td><td><code>dcdiag /q</code></td><td>Koi output/error nahi</td></tr>
+          <tr><td>AD replication</td><td><code>repadmin /replsummary</code></td><td>Fails = 0</td></tr>
+          <tr><td>Important services</td><td><code>Get-Service NTDS,DNS,Netlogon</code></td><td>Status = Running</td></tr>
+          <tr><td>Applied GPO</td><td><code>gpresult /r</code></td><td>Expected GPO list mein ho</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="box tip"><b>Placeholder:</b> <code>&lt;domain&gt;</code>, <code>&lt;server&gt;</code> aur <code>&lt;IP&gt;</code> ko apni environment ki value se replace karein.</div>
+  </section>
 
-<h2 class="section" id="phase2">Phase 2: Identity &amp; Access (Day 3-4)</h2>
+  <section class="search-section" id="troubleshoot" data-search-card>
+    <div class="section-heading">
+      <div>
+        <span class="eyebrow">IF THIS → CHECK THAT</span>
+        <h2>Troubleshoot fast</h2>
+      </div>
+      <a class="text-link" href="gui-troubleshooting.html">Full troubleshooting guide →</a>
+    </div>
+    <div class="trouble-grid">
+      <article class="trouble-card">
+        <h3>🔐 Login fail</h3>
+        <p><b>Check:</b> account lock, password, time sync, DNS.</p>
+        <code>Search-ADAccount -LockedOut</code>
+        <a href="gui-troubleshooting.html#login">Fix steps →</a>
+      </article>
+      <article class="trouble-card">
+        <h3>🌐 Website/name nahi khul raha</h3>
+        <p><b>Check:</b> client DNS, A record, forwarder.</p>
+        <code>nslookup &lt;hostname&gt;</code>
+        <a href="gui-troubleshooting.html#dns">Fix steps →</a>
+      </article>
+      <article class="trouble-card">
+        <h3>📡 IP nahi mil rahi</h3>
+        <p><b>Check:</b> DHCP service, scope free IP, relay.</p>
+        <code>ipconfig /renew</code>
+        <a href="gui-troubleshooting.html#dhcp">Fix steps →</a>
+      </article>
+      <article class="trouble-card">
+        <h3>🧩 GPO apply nahi hui</h3>
+        <p><b>Check:</b> OU link, filtering, SYSVOL, DNS.</p>
+        <code>gpresult /h gpo.html</code>
+        <a href="gui-troubleshooting.html#gpo">Fix steps →</a>
+      </article>
+      <article class="trouble-card">
+        <h3>📁 Share access denied</h3>
+        <p><b>Check:</b> group membership + Share + NTFS.</p>
+        <code>whoami /groups</code>
+        <a href="gui-troubleshooting.html#share">Fix steps →</a>
+      </article>
+      <article class="trouble-card">
+        <h3>🔁 Replication fail</h3>
+        <p><b>Check:</b> DNS, time, RPC/firewall, DC health.</p>
+        <code>repadmin /showrepl</code>
+        <a href="gui-troubleshooting.html#repl">Fix steps →</a>
+      </article>
+    </div>
+  </section>
 
-<h3 class="step">6. OU Design &amp; Delegation</h3>
-<pre><code>New-ADOrganizationalUnit -Name "CORP-HQ" -Path "DC=corp,DC=company,DC=local"
-New-ADOrganizationalUnit -Name "Users" -Path "OU=CORP-HQ,DC=corp,DC=company,DC=local"
-redirusr "OU=Users,OU=CORP-HQ,DC=corp,DC=company,DC=local"
-redircmp "OU=Computers,OU=CORP-HQ,DC=corp,DC=company,DC=local"</code></pre>
-<p>Delegation: dsa.msc → OU → Delegate Control → helpdesk group → reset passwords.</p>
+  <section class="search-section" id="escalate" data-search-card>
+    <div class="box danger escalation">
+      <div>
+        <span class="eyebrow">STOP AND ESCALATE</span>
+        <h2>Senior ko kab bulana hai?</h2>
+      </div>
+      <ul>
+        <li>Multiple users ek saath lock ho rahe hain</li>
+        <li>AD replication/SYSVOL broken hai</li>
+        <li>FSMO seize, USN rollback ya DC restore karna hai</li>
+        <li>Unexpected Domain Admin ya security breach dikhe</li>
+      </ul>
+    </div>
+  </section>
 
-<h3 class="step">7. User &amp; Group Strategy (AGDLP)</h3>
-<pre><code>New-ADUser -Name "Amit Sharma" -SamAccountName "amit.sharma" `
-  -UserPrincipalName "amit.sharma@corp.company.local" `
-  -Path "OU=Users,OU=CORP-HQ,DC=corp,DC=company,DC=local" `
-  -AccountPassword (Read-Host -AsSecureString) -ChangePasswordAtLogon $true -Enabled $true
-New-ADGroup -Name "SG-Finance" -GroupScope Global -GroupCategory Security
-Add-ADGroupMember -Identity "SG-Finance" -Members "amit.sharma"</code></pre>
-<div class="box tip"><b>💡 AGDLP:</b> Accounts → Global → Domain Local → Permission. Resource perms Domain Local group ko do.</div>
+  <div class="no-results" id="no-results" hidden>
+    <h2>Koi result nahi mila</h2>
+    <p>DNS, DHCP, login, GPO, share ya replication search karke dekhein.</p>
+  </div>
 
-<h3 class="step">8. Group Policy Baseline</h3>
-<table><tr><th>Policy</th><th>Setting</th></tr><tr><td>Password length</td><td>Min 14</td></tr><tr><td>Account lockout</td><td>5 attempts / 15 min</td></tr><tr><td>USB block</td><td>Deny removable storage</td></tr><tr><td>AppLocker</td><td>Allow signed only</td></tr></table>
-<pre><code>New-GPO -Name "Baseline-Security" | New-GPLink -Target "OU=CORP-HQ,DC=corp,DC=company,DC=local"
-gpresult /r
-gpresult /h report.html</code></pre>
-<div class="box danger"><b>⚠️</b> USB block / AppLocker domain-wide directly mat lagao. Pehle pilot OU (5-10 machines), phir rollout.</div>
-
-<h3 class="step">9. Home Folders &amp; Redirection</h3>
-<pre><code>New-Item "E:\Users" -ItemType Directory
-New-SmbShare -Name "Users$" -Path "E:\Users" -ChangeAccess "CORP\Domain Users"</code></pre>
-<p>GPO → User → Folder Redirection → Documents → \\FS01\Users$\%username%</p>
-<div class="box tip"><b>💡</b> M365 hai to OneDrive Known Folder Move > roaming profiles.</div>
-
-<h2 class="section" id="phase3">Phase 3: Network Services (Day 5-6)</h2>
-
-<h3 class="step">10. DNS Enterprise Config</h3>
-<pre><code>Add-DnsServerPrimaryZone -NetworkID "10.10.10.0/24" -ReplicationScope "Forest"
-Add-DnsServerConditionalForwarderZone -Name "partner.com" -MasterServers 8.8.8.8
-Set-DnsServerScavenging -ScavengingState $true
-Add-DnsServerForwarder -IPAddress 8.8.8.8,1.1.1.1</code></pre>
-<pre><code>Resolve-DnsName dc01.corp.company.local
-dcdiag /test:dns</code></pre>
-<div class="box warn"><b>⚠️</b> Scavenging galat config = valid records delete. Intervals samajh ke set karo.</div>
-
-<h3 class="step">11. DHCP Scope Design</h3>
-<pre><code>Install-WindowsFeature DHCP -IncludeManagementTools
-Add-DhcpServerInDC -DnsName dc01.corp.company.local -IPAddress 10.10.10.10
-Add-DhcpServerv4Scope -Name "Clients-VLAN20" -StartRange 10.10.20.50 -EndRange 10.10.20.250 -SubnetMask 255.255.255.0
-Set-DhcpServerv4OptionValue -ScopeId 10.10.20.0 -Router 10.10.20.1 -DnsServer 10.10.10.10,10.10.10.11
-Add-DhcpServerv4Failover -Name "DHCP-FO" -PartnerServer dc02.corp.company.local -ScopeId 10.10.20.0 -LoadBalancePercent 50</code></pre>
-<pre><code>Get-DhcpServerv4ScopeStatistics
-Get-DhcpServerInDC</code></pre>
-<div class="box danger"><b>⚠️</b> Rogue DHCP = galat IP/gateway. Switch par DHCP snooping enable karo.</div>
-
-<h3 class="step">12. File Server &amp; Permissions</h3>
-<pre><code>Install-WindowsFeature FS-FileServer,FS-Resource-Manager,FS-DFS-Namespace -IncludeManagementTools
-New-SmbShare -Name "Data" -Path "E:\Data" -ChangeAccess "CORP\Domain Users" -FolderEnumerationMode AccessBased
-icacls "E:\Data\Finance" /inheritance:r
-icacls "E:\Data\Finance" /grant "CORP\SG-Finance:(OI)(CI)M"</code></pre>
-<table><tr><th>Layer</th><th>Setting</th></tr><tr><td>Share</td><td>Authenticated Users = Change</td></tr><tr><td>NTFS</td><td>Dept group = Modify</td></tr><tr><td>Everyone</td><td>REMOVE</td></tr><tr><td>ABE</td><td>On</td></tr></table>
-<div class="box tip"><b>💡 Shadow Copies:</b> <code>vssadmin add shadowstorage /for=E: /on=E: /maxsize=10%</code></div>
-
-<h2 class="section" id="phase4">Phase 4: Advanced Services (Day 7-10)</h2>
-
-<h3 class="step">13. Certificate Services (PKI)</h3>
-<pre><code>Install-WindowsFeature ADCS-Cert-Authority,ADCS-Web-Enrollment -IncludeManagementTools
-Install-AdcsCertificationAuthority -CAType EnterpriseRootCA -KeyLength 4096 -HashAlgorithmName SHA256</code></pre>
-<div class="box warn"><b>⚠️</b> Production: Offline Root CA + Online Subordinate CA (two-tier). CA name baad mein change nahi hota.</div>
-
-<h3 class="step">14. Print Server</h3>
-<pre><code>Install-WindowsFeature Print-Server -IncludeManagementTools
-Add-PrinterPort -Name "IP_10.10.20.200" -PrinterHostAddress "10.10.20.200"
-Add-Printer -Name "HQ-Finance-HP" -DriverName "HP Universal Printing PCL 6" -PortName "IP_10.10.20.200" -Shared</code></pre>
-
-<h3 class="step">15. Hyper-V / Virtualization</h3>
-<pre><code>Install-WindowsFeature Hyper-V -IncludeManagementTools -Restart
-New-VMSwitch -Name "External" -NetAdapterName "Ethernet" -AllowManagementOS $true
-New-VM -Name "APP01" -MemoryStartupBytes 8GB -Generation 2 -NewVHDPath "E:\VMs\APP01.vhdx" -NewVHDSizeBytes 100GB -SwitchName "External"</code></pre>
-<div class="box warn"><b>⚠️</b> Checkpoint ≠ Backup. Production DB/DC par lambe checkpoints mat rakho.</div>
-
-<h3 class="step">16. Backup &amp; DR</h3>
-<pre><code>Install-WindowsFeature Windows-Server-Backup
-wbadmin start systemstatebackup -backuptarget:F: -quiet
-wbadmin enable backup -addtarget:F: -schedule:02:00 -include:C: -systemState -quiet</code></pre>
-<table><tr><th>Metric</th><th>Example</th></tr><tr><td>RPO</td><td>24h</td></tr><tr><td>RTO</td><td>4h</td></tr><tr><td>Restore drill</td><td>Monthly</td></tr></table>
-<div class="box danger"><b>⚠️</b> Tested backup = backup. Untested = hope. 3-2-1 rule: 3 copies, 2 media, 1 offsite.</div>
-
-<h2 class="section" id="phase5">Phase 5: Monitoring &amp; Maintenance</h2>
-<h3 class="step">17. Monitoring</h3>
-<pre><code>Get-Counter "\LogicalDisk(*)\% Free Space"
-repadmin /replsummary
-Get-DhcpServerv4ScopeStatistics
-Get-WinEvent -LogName System -MaxEvents 50 | Where LevelDisplayName -eq "Error"</code></pre>
-<h3 class="step">18. Documentation</h3>
-<p>Network diagram, IP schema, AD/OU structure, GPO list, onboarding SOP, change log, incident runbook.</p>
-
-<h2 class="section" id="troubleshooting">Brownfield Troubleshooting</h2>
-
-<h3 class="step" id="s1">Scenario 1: User login nahi kar pa raha</h3>
-<pre><code>Get-ADUser amit.sharma -Properties LockedOut,PasswordExpired,Enabled
-Search-ADAccount -LockedOut
-w32tm /stripchart /computer:dc01 /samples:3
-klist
-nltest /dsgetdc:corp.company.local
-gpresult /r</code></pre>
-<p><b>Logs:</b> Event 4625 (failed logon), 4740 (lockout). <b>Fix:</b> <code>Unlock-ADAccount</code>; time skew &gt;5min = Kerberos fail → <code>w32tm /resync</code>.</p>
-<div class="box danger"><b>Escalation:</b> Multiple users locked simultaneously = possible attack → senior.</div>
-
-<h3 class="step" id="s2">Scenario 2: GPO apply nahi ho rahi</h3>
-<pre><code>gpupdate /force
-gpresult /r
-gpresult /h gpo.html
-repadmin /showrepl</code></pre>
-<p><b>Cause:</b> Security filtering, WMI filter, block inheritance, not domain-joined, SYSVOL replication pending.</p>
-<div class="box danger"><b>Escalation:</b> SYSVOL replication broken → senior (DFSR recovery).</div>
-
-<h3 class="step" id="s3">Scenario 3: DHCP se IP nahi mil rahi</h3>
-<pre><code>Get-DhcpServerInDC
-Get-DhcpServerv4ScopeStatistics
-Get-Service DHCPServer
-ipconfig /release; ipconfig /renew</code></pre>
-<p><b>Cause:</b> Scope full, service stopped, unauthorized, rogue DHCP, missing relay (ip-helper) on VLAN.</p>
-<div class="box danger"><b>Escalation:</b> Rogue DHCP detected → network + security team.</div>
-
-<h3 class="step" id="s4">Scenario 4: File share access denied</h3>
-<pre><code>whoami /groups
-icacls "E:\Data\Finance"
-net use \\FS01\Data</code></pre>
-<p><b>Cause:</b> NTFS vs Share conflict (most restrictive wins), explicit Deny, group change (re-login needed), token bloat, ABE. Use <b>Effective Access</b> tab.</p>
-<div class="box danger"><b>Escalation:</b> Token size issue (1000+ groups) → AD cleanup project.</div>
-
-<h3 class="step" id="s5">Scenario 5: AD replication fail</h3>
-<pre><code>repadmin /showrepl
-repadmin /replsummary
-dcdiag /test:replications
-dcdiag /test:dns
-portqry -n dc02 -p both -e 135</code></pre>
-<p><b>Cause:</b> DNS fail (most common), time skew, firewall (RPC/135), KCC, USN rollback, lingering objects.</p>
-<div class="box danger"><b>⚠️ USN rollback</b> (DC wrongly restored from snapshot) = replication permanently breaks → rebuild DC. Escalation immediately.</div>
-
-<h3 class="step" id="s6">Scenario 6: DC crash restore</h3>
-<p><b>Recoverable:</b> DSRM boot → system state restore. <b>Objects deleted:</b> AD Recycle Bin restore. <b>Unrecoverable:</b> metadata cleanup + seize FSMO.</p>
-<pre><code>Get-ADObject -Filter 'isDeleted -eq $true' -IncludeDeletedObjects | Restore-ADObject
-Move-ADDirectoryServerOperationMasterRole -Identity DC02 -OperationMasterRole 0,1,2,3,4 -Force</code></pre>
-<div class="box danger"><b>⚠️</b> FSMO seize sirf jab original DC kabhi wapas nahi aayega. Seize ke baad purana DC network par mat lao. Senior approval mandatory.</div>
-
-<h3 class="step" id="s7">Scenario 7: Fast onboarding</h3>
-<pre><code>Import-Csv "C:\new_users.csv" | ForEach-Object {
-  New-ADUser -Name "$($_.First) $($_.Last)" -SamAccountName "$($_.First).$($_.Last)" `
-    -UserPrincipalName "$($_.First).$($_.Last)@corp.company.local" `
-    -Path "OU=Users,OU=CORP-HQ,DC=corp,DC=company,DC=local" `
-    -AccountPassword (ConvertTo-SecureString $_.Password -AsPlainText -Force) `
-    -ChangePasswordAtLogon $true -Enabled $true
-  Add-ADGroupMember -Identity "SG-$($_.Dept)" -Members "$($_.First).$($_.Last)"
-}</code></pre>
-<p>CSV: First,Last,Dept,Password. Test 1 user first; add <code>-WhatIf</code> for dry-run.</p>
-
-<h3 class="step" id="s8">Scenario 8: Security audit fail</h3>
-<pre><code>Search-ADAccount -AccountInactive -TimeSpan 90.00:00:00 | Disable-ADAccount
-Get-ADUser -Filter {PasswordNeverExpires -eq $true} -Properties PasswordNeverExpires
-Get-ADGroupMember "Domain Admins"</code></pre>
-<p><b>Fix:</b> Password policy enforce, inactive disable, privileged access review, audit policy GPO, patch compliance.</p>
-<div class="box danger"><b>Escalation:</b> Active compromise (unexpected Domain Admin) → security/IR team immediately.</div>
-
-<h2 class="section">Deliverables (har phase ke baad)</h2>
-<table><tr><th>Item</th><th>Content</th></tr><tr><td>Validation checklist</td><td>dcdiag, repadmin, services — expected 0 errors</td></tr><tr><td>Rollback plan</td><td>Snapshot revert / role uninstall / GPO unlink</td></tr><tr><td>Escalation trigger</td><td>Replication broken, USN rollback, FSMO seize, breach</td></tr></table>
-
-<p style="margin-top:40px;color:var(--muted);font-size:13px;border-top:1px solid var(--border);padding-top:16px">Windows Server Infrastructure Guide · Field Engineer Toolkit · Built with GitLab Pages</p>
+  <footer class="site-footer">
+    <p><b>Windows Server Easy Guide</b> · Learn in lab, validate every step, then deploy.</p>
+    <a href="cheatsheet.html">Printable Cheat Sheet</a>
+  </footer>
 </main>
 </div>
+
 <script>
-function doSearch(q){q=q.toLowerCase().trim();var steps=document.querySelectorAll('h3.step');if(!q){document.querySelectorAll('h2.section,h3.step,.box,.hero').forEach(e=>e.classList.remove('hidden'));return;}
-document.querySelectorAll('h2.section').forEach(e=>e.classList.add('hidden'));
-steps.forEach(function(h){var block=[h];var n=h.nextElementSibling;while(n&&!n.matches('h3.step,h2.section')){block.push(n);n=n.nextElementSibling;}
-var text=block.map(e=>e.textContent).join(' ').toLowerCase();var match=text.includes(q);block.forEach(e=>e.classList.toggle('hidden',!match));});}
+const menuButton = document.querySelector('.menu-toggle');
+const sidebar = document.querySelector('#sidebar');
+const search = document.querySelector('#guide-search');
+const cards = [...document.querySelectorAll('[data-search-card]')];
+const noResults = document.querySelector('#no-results');
+
+menuButton.addEventListener('click', () => {
+  const isOpen = sidebar.classList.toggle('is-open');
+  menuButton.setAttribute('aria-expanded', String(isOpen));
+});
+
+sidebar.addEventListener('click', event => {
+  if (event.target.matches('a') && window.innerWidth <= 800) {
+    sidebar.classList.remove('is-open');
+    menuButton.setAttribute('aria-expanded', 'false');
+  }
+});
+
+search.addEventListener('input', () => {
+  const query = search.value.toLowerCase().trim();
+  let visible = 0;
+  cards.forEach(card => {
+    const match = !query || card.textContent.toLowerCase().includes(query);
+    card.hidden = !match;
+    if (match) visible += 1;
+  });
+  noResults.hidden = visible !== 0;
+});
 </script>
 </body>
 </html>

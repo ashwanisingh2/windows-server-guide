@@ -1,57 +1,124 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="hi-Latn">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Cheat Sheet — Windows Server (सार)</title>
+  <meta name="description" content="Windows Server daily commands aur troubleshooting ki printable cheat sheet.">
+  <title>Windows Server Printable Cheat Sheet</title>
   <link rel="stylesheet" href="gui-style.css">
-  <style>body{padding:28px;max-width:900px;margin:auto}</style>
 </head>
-<body>
-  <h1>Cheat Sheet — तेज़ सार</h1>
-  <p>सबसे छोटी, काम की चीज़ें — copy-paste friendly.</p>
+<body class="standalone-page">
+  <a class="skip-link" href="#main-content">Main content par jao</a>
+  <main class="standalone-content wide" id="main-content">
+    <div class="cheat-header">
+      <div>
+        <a class="back-link" href="index.html">← Main Guide</a>
+        <span class="eyebrow">SAVE / PRINT / KEEP OPEN</span>
+        <h1>Windows Server Daily Cheat Sheet</h1>
+        <p>Check first → root cause samjhein → phir change karein.</p>
+      </div>
+      <button class="button secondary print-button" type="button" onclick="window.print()">🖨️ Print / Save PDF</button>
+    </div>
 
-  <h2>सबसे पहले (Essentials)</h2>
-  <ul>
-    <li>Static IP on DC, client DNS = DC IP</li>
-    <li>Snapshot/backup before changes</li>
-    <li>Test commands on lab before prod</li>
-  </ul>
+    <div class="cheat-columns">
+      <section class="cheat-panel danger-panel">
+        <h2>⚠️ Change se pehle</h2>
+        <ul class="tight-list">
+          <li>Backup/snapshot aur rollback plan ready.</li>
+          <li>Production change = approved maintenance window.</li>
+          <li>Remote IP change = console/iLO access ready.</li>
+          <li>GPO = pehle pilot OU par test.</li>
+        </ul>
+      </section>
 
-  <h2>Quick Commands</h2>
-  <table>
-    <tr><th>Issue</th><th>Command</th></tr>
-    <tr><td>DNS test</td><td><code>nslookup host</code></td></tr>
-    <tr><td>Time sync</td><td><code>w32tm /resync</code></td></tr>
-    <tr><td>GPO apply</td><td><code>gpupdate /force</code></td></tr>
-    <tr><td>DHCP status</td><td><code>Get-DhcpServerv4ScopeStatistics</code></td></tr>
-    <tr><td>AD replication</td><td><code>repadmin /replsummary</code></td></tr>
-    <tr><td>Check services</td><td><code>Get-Service NTDS,DNS,Netlogon</code></td></tr>
-  </table>
+      <section class="cheat-panel">
+        <h2>🏥 AD health</h2>
+        <dl class="command-list">
+          <div><dt>DC quick health</dt><dd><code>dcdiag /q</code></dd></div>
+          <div><dt>Replication summary</dt><dd><code>repadmin /replsummary</code></dd></div>
+          <div><dt>Replication detail</dt><dd><code>repadmin /showrepl</code></dd></div>
+          <div><dt>Find a DC</dt><dd><code>nltest /dsgetdc:&lt;domain&gt;</code></dd></div>
+        </dl>
+      </section>
 
-  <h2>Setup Shortcuts (order)</h2>
-  <ol>
-    <li>Lab → AD DS install → Promote DC</li>
-    <li>DNS forward/reverse → Forwarders set</li>
-    <li>DHCP scope + authorize</li>
-    <li>Users/Groups → GPO baseline</li>
-    <li>File share + NTFS perms → Shadow copies</li>
-  </ol>
+      <section class="cheat-panel">
+        <h2>🌐 Network + DNS</h2>
+        <dl class="command-list">
+          <div><dt>Full IP config</dt><dd><code>ipconfig /all</code></dd></div>
+          <div><dt>Resolve name</dt><dd><code>nslookup &lt;host&gt;</code></dd></div>
+          <div><dt>Clear DNS cache</dt><dd><code>ipconfig /flushdns</code></dd></div>
+          <div><dt>Test port</dt><dd><code>Test-NetConnection &lt;server&gt; -Port 53</code></dd></div>
+        </dl>
+      </section>
 
-  <h2>Troubleshoot Fast</h2>
-  <ul>
-    <li>Login fail → check time, locked account, <code>klist</code></li>
-    <li>Name fail → client DNS, <code>ipconfig /flushdns</code>, <code>nslookup</code></li>
-    <li>Replication → <code>dcdiag</code> + <code>repadmin /showrepl</code></li>
-  </ul>
+      <section class="cheat-panel">
+        <h2>👤 User + login</h2>
+        <dl class="command-list">
+          <div><dt>Locked users</dt><dd><code>Search-ADAccount -LockedOut</code></dd></div>
+          <div><dt>User details</dt><dd><code>Get-ADUser &lt;user&gt; -Properties *</code></dd></div>
+          <div><dt>Current identity</dt><dd><code>whoami /all</code></dd></div>
+          <div><dt>Kerberos tickets</dt><dd><code>klist</code></dd></div>
+        </dl>
+      </section>
 
-  <h2>Safety Rules</h2>
-  <ul>
-    <li>Change only in maintenance window for prod</li>
-    <li>Test GPO on pilot OU first</li>
-    <li>Never change DC IP without console access</li>
-  </ul>
+      <section class="cheat-panel">
+        <h2>🧩 Group Policy</h2>
+        <dl class="command-list">
+          <div><dt>Apply policy</dt><dd><code>gpupdate /force</code></dd></div>
+          <div><dt>Quick result</dt><dd><code>gpresult /r</code></dd></div>
+          <div><dt>HTML report</dt><dd><code>gpresult /h gpo.html</code></dd></div>
+          <div><dt>Open GPMC</dt><dd><code>gpmc.msc</code></dd></div>
+        </dl>
+      </section>
 
-  <p style="margin-top:30px"><a href="index.html">← Back to Main Guide</a></p>
+      <section class="cheat-panel">
+        <h2>📡 DHCP</h2>
+        <dl class="command-list">
+          <div><dt>Renew client IP</dt><dd><code>ipconfig /release &amp; ipconfig /renew</code></dd></div>
+          <div><dt>Scope status</dt><dd><code>Get-DhcpServerv4ScopeStatistics</code></dd></div>
+          <div><dt>Authorized servers</dt><dd><code>Get-DhcpServerInDC</code></dd></div>
+          <div><dt>DHCP service</dt><dd><code>Get-Service DHCPServer</code></dd></div>
+        </dl>
+      </section>
+
+      <section class="cheat-panel">
+        <h2>📁 File + permissions</h2>
+        <dl class="command-list">
+          <div><dt>Group token</dt><dd><code>whoami /groups</code></dd></div>
+          <div><dt>NTFS permissions</dt><dd><code>icacls "&lt;path&gt;"</code></dd></div>
+          <div><dt>SMB shares</dt><dd><code>Get-SmbShare</code></dd></div>
+          <div><dt>Map/test share</dt><dd><code>net use \\&lt;server&gt;\&lt;share&gt;</code></dd></div>
+        </dl>
+      </section>
+
+      <section class="cheat-panel">
+        <h2>⏱️ Time + services</h2>
+        <dl class="command-list">
+          <div><dt>Time status</dt><dd><code>w32tm /query /status</code></dd></div>
+          <div><dt>Resync time</dt><dd><code>w32tm /resync</code></dd></div>
+          <div><dt>Core services</dt><dd><code>Get-Service NTDS,DNS,Netlogon</code></dd></div>
+          <div><dt>Recent errors</dt><dd><code>Get-WinEvent -LogName System -MaxEvents 20</code></dd></div>
+        </dl>
+      </section>
+    </div>
+
+    <section class="if-then">
+      <h2>If this → check this first</h2>
+      <div class="table-wrap">
+        <table class="cheat-table">
+          <thead><tr><th>Symptom</th><th>First checks</th><th>Details</th></tr></thead>
+          <tbody>
+            <tr><td>Login fail</td><td>Lockout → time → DNS</td><td><a href="gui-troubleshooting.html#login">Open guide</a></td></tr>
+            <tr><td>Name resolve fail</td><td>Client DNS → record → forwarder</td><td><a href="gui-troubleshooting.html#dns">Open guide</a></td></tr>
+            <tr><td>IP nahi mili</td><td>Service → scope → relay</td><td><a href="gui-troubleshooting.html#dhcp">Open guide</a></td></tr>
+            <tr><td>GPO nahi lagi</td><td>OU link → filtering → SYSVOL</td><td><a href="gui-troubleshooting.html#gpo">Open guide</a></td></tr>
+            <tr><td>Share denied</td><td>Groups → Share → NTFS</td><td><a href="gui-troubleshooting.html#share">Open guide</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="box tip"><b>Placeholders:</b> <code>&lt;domain&gt;</code>, <code>&lt;host&gt;</code>, <code>&lt;server&gt;</code>, <code>&lt;user&gt;</code> aur <code>&lt;path&gt;</code> ko apni environment ki actual value se replace karein.</div>
+  </main>
 </body>
 </html>
